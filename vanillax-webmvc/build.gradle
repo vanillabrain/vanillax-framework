@@ -1,0 +1,34 @@
+group 'vanillax-framework'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'groovy'
+apply plugin: 'java'
+apply plugin: 'war'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    def tomcatVersion = '8.0.21'
+    compile 'org.codehaus.groovy:groovy-all:2.4.7'
+
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+    testCompile 'org.apache.logging.log4j:log4j-core:2.7'
+    testCompile 'org.apache.logging.log4j:log4j-api:2.7'
+    testCompile 'org.apache.logging.log4j:log4j-jul:2.7'
+
+    providedCompile "mysql:mysql-connector-java:5.1.45"
+    providedCompile "org.apache.tomcat:tomcat-catalina:${tomcatVersion}"
+    providedCompile "org.apache.tomcat:tomcat-coyote:${tomcatVersion}"
+    providedCompile "org.apache.tomcat:tomcat-jasper:${tomcatVersion}"
+    providedCompile "org.apache.tomcat:tomcat-jdbc:${tomcatVersion}"
+
+    compile project(':vanillax-core')
+}
+
+war {   //war 플러그인 설정,
+    archiveName = "${baseName}.${extension}"                            // 버전이름 지우기 위한 조치
+}

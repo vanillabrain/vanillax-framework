@@ -1,0 +1,4 @@
+rootProject.name = 'vanillax-framework'
+include 'vanillax-core'
+include 'vanillax-webmvc'
+include 'vanillax-batch'

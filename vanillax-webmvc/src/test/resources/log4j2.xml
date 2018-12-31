@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="DEBUG" monitorInterval="60">
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyyMMdd HH:mm:ss.SSS} [%t] %-5level %logger{36} %M - %msg%n" />
+        </Console>
+
+        <RollingFile name="RollingFile" fileName="logs/web.log" append="true"
+                     filePattern="logs/$${date:yyyyMM}/web-%d{yyyyMMdd}-%i.log">
+            <PatternLayout pattern="%d{yyyyMMdd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="500 MB"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="DEBUG">
+            <AppenderRef ref="CONSOLE"/>
+            <!--
+            <AppenderRef ref="RollingFile"/>
+            -->
+        </Root>
+    </Loggers>
+</Configuration>

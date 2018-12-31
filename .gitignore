@@ -1,0 +1,11 @@
+.gradle
+.DS_Store
+*.iml
+build
+.idea
+tomcat.8080/
+/classes/
+out/
+logs/
+*.log
+*.log.*

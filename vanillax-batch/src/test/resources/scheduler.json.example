@@ -1,0 +1,158 @@
+{
+    /* schedule정보에 명시하지않을 경우 공통으로 참조하는 설정값 */
+  "global":{
+    "packagePrefix":"crawler.", /* script 객체 패키지의 접두사 */
+    "interval":180, /* 초 */
+    "idleTime":"02:00-05:00", /* 미작동시간 */
+    "postScript":"Postprocessor", /* 스케줄 후처리 */
+    "preScript":"Preprocessor", /* 스케줄 선처리 */
+    "errorScript":"/common.ErrorProcessor", /* 오류발생시 처리 */
+    "dummy":null
+  },
+
+  "schedule":[
+    {
+      "script":"/common.ConfigWatchDog", /* 호출되는 GroovyScript '/'로 시작되면 절대경로로 인식하여 접두사를 사용하지 않는다. */
+      "interval":600, /* 초 */
+      "idleTime":null, /* 미작동시간 null이면 미작동시간 적용없이 언제나 구동된다 */
+      "postScript":null,
+      "active":false /* false일경우 작동하지 않는다 */
+    },
+    {
+      "script":"/manage.TopPointMaker",
+      "interval":600,
+      "idleTime":"02:00-05:00",
+      "postScript":null,
+      "preScript":null,
+      "active":true
+    },
+    {
+      "script":"community.slrclub.HotArticle",
+      "interval":300,
+      "idleTime":"02:00-05:00",
+      "active":true
+    },
+    {
+      "script":"community.slrclub.BestArticle",
+      "interval":310,
+      "idleTime":"02:00-05:00",
+      "active":true
+    },
+    {
+      "script":"community.bobaedream.BestArticle",
+      "interval":310,
+      "idleTime":"02:00-05:00",
+      "active":true
+    },
+    {
+      "script":"community.clien.BestArticle",
+      "interval":300,
+      "idleTime":"02:00-05:00",
+      "active":true
+    },
+    {
+      "script":"community.clien.Jirum",
+      "interval":300,
+      "idleTime":"02:00-05:00",
+      "active":true
+    },
+    {
+      "script":"community.ppomppu.HotArticle",
+      "interval":600,
+      "idleTime":"02:00-05:00",
+      "active":true
+    },
+    {
+      "script":"community.ppomppu.PpomArticle",
+      "interval":300,
+      "idleTime":"02:00-05:00",
+      "active":true
+    },
+    {
+      "script":"community.ruliweb.ConsoleArticle",
+      "interval":600,
+      "idleTime":"02:00-05:00",
+      "active":true
+    },
+    {
+      "script":"community.todayhumor.BestOfBestArticle",
+      "interval":600,
+      "idleTime":"02:00-05:00",
+      "active":true
+    },
+    {
+      "script":"community.todayhumor.HotArticle",
+      "interval":600,
+      "idleTime":"02:00-05:00",
+      "active":true
+    },
+    {
+      "script":"coupang.TodayProducts",
+      "interval":600,
+      "idleTime":"02:00-05:00",
+      "active":false
+    },
+    {
+      "script":"rss.JoongangMajorNewsRss",
+      "interval":600,
+      "idleTime":"02:00-05:00",
+      "active":true
+    },
+    {
+      "script":"rss.JoongangHotNewsRss",
+      "interval":600,
+      "idleTime":"02:00-05:00",
+      "active":true
+    },
+    {
+      "script":"rss.KhanRss",
+      "interval":600,
+      "idleTime":"02:00-05:00",
+      "active":true
+    },
+    {
+      "script":"rss.NewsPeppermintRss",
+      "interval":600,
+      "idleTime":"02:00-05:00",
+      "active":true
+    },
+    {
+      "script":"rss.OhmynewsRss",
+      "interval":600,
+      "idleTime":"02:00-05:00",
+      "active":true
+    },
+    {
+      "script":"rss.HuffingtonpostRss",
+      "interval":600,
+      "idleTime":"02:00-05:00",
+      "active":true
+    },
+    {
+      "script":"rss.HankyungRss",
+      "interval":600,
+      "idleTime":"02:00-05:00",
+      "active":true
+    },
+    {
+      "script":"rss.ChosunRss",
+      "interval":600,
+      "idleTime":"02:00-05:00",
+      "active":true
+    },
+    {
+      "script":"rss.PpssRss",
+      "interval":600,
+      "idleTime":"02:00-05:00",
+      "active":true
+    },
+    {
+      "script":"rss.BloterRss",
+      "interval":600,
+      "idleTime":"02:00-05:00",
+      "active":true
+    },
+    {}
+  ]
+}
+
