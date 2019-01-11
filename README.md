@@ -14,6 +14,21 @@ Groovy 기반의 기업용 서버 Application(Web, Batch) Framework입니다.
     - @Autowired를 이용한 DI구현
     - @Repository를 이용한 Data 접근
     - @Transactional을 이용한 단순한 트랜잭션관리
+    ```
+    class student extends ServiceBase {
+
+        @Autowired
+        StudentDAO studentDAO
+
+        @Transactional(autocommit=false) //Transaction 관리
+        def findMany(data) {
+            def param = [:] //groovy object
+            param['email'] = data._param['mail']
+            data.resultList = studentDAO.selectActionSchedule([:])
+            return data
+        }
+    }
+    ```
 * Non-XML : SQL정의, 서버 Configuration, Class 속성명세 등에 XML을 사용하지 않음.
 * Data Access Object 지원
     - 직관적인 SQL 개발환경
@@ -28,6 +43,9 @@ Groovy 기반의 기업용 서버 Application(Web, Batch) Framework입니다.
                 A.email
             FROM Student A
             WHERE A.id = :id
+              #if($email) /* Velocity 문법을 이용한 Dynamic Query */
+              AND email like concat(:email,'%')
+              #end
         ''')
         List selectStudent(Map x)
     ```
