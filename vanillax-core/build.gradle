@@ -23,7 +23,7 @@ dependencies {
 }
 
 publish {
-    artifactId = 'core'
+    artifactId = 'vanillax-core'
     publishVersion = '0.0.1'
     desc = 'VanillaX Core'
     userOrg = POM_DEVELOPER_ID

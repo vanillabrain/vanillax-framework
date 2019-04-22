@@ -1,4 +1,4 @@
-group 'vanillax-framework'
+group 'vanillax.framework'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'groovy'
@@ -35,7 +35,7 @@ war {   //war 플러그인 설정,
 }
 
 publish {
-    artifactId = 'webmvc'
+    artifactId = 'vanillax-webmvc'
     publishVersion = '0.0.1'
     desc = 'VanillaX Web MVC'
     userOrg = POM_DEVELOPER_ID

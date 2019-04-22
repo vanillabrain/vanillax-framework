@@ -29,7 +29,7 @@ public class StringUtil {
     /**
      * /로 구분되는 문자열을 각 레벨별로 나누어 리스트로 변환한다.
      * aa/bb/cc/dd
-     * -->
+     * --
      *   [0] : aa
      *   [1] : aa/bb
      *   [2] : aa/bb/cc

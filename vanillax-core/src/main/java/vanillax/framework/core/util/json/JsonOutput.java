@@ -42,7 +42,7 @@ public class JsonOutput {
     private static final String DEFAULT_TIMEZONE = "Asia/Seoul";
 
     /**
-     * @return "null" for a null value, or a JSON array representation for a collection, array, iterator or enumeration,
+     * "null" for a null value, or a JSON array representation for a collection, array, iterator or enumeration,
      * or representation for other object.
      */
     public static void toJson(Writer writer, Object object) throws IOException {
