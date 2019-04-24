@@ -24,7 +24,7 @@ dependencies {
 
 publish {
     artifactId = 'vanillax-core'
-    publishVersion = '0.0.1'
+    publishVersion = '1.0.0'
     desc = 'VanillaX Core'
     userOrg = POM_DEVELOPER_ID
     groupId = GROUP
