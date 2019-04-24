@@ -9,7 +9,6 @@ sourceCompatibility = 1.8
 
 repositories {
     jcenter()
-    mavenCentral()
 }
 
 dependencies {
@@ -26,7 +25,7 @@ dependencies {
 
 publish {
     artifactId = 'vanillax-batch'
-    publishVersion = '0.0.1'
+    publishVersion = '0.0.2'
     desc = 'VanillaX Batch'
     userOrg = POM_DEVELOPER_ID
     groupId = GROUP

@@ -5,6 +5,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.novoda:bintray-release:0.9' // version of the plugin compiled using composite builds (gradle upload)
+        classpath 'net.saliman:gradle-properties-plugin:1.5.0' // Gradle Properties Plugin
     }
 }
 
@@ -14,6 +15,7 @@ version '0.9-SNAPSHOT'
 apply plugin: 'groovy'
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'net.saliman.properties'
 
 sourceCompatibility = 1.8
 
