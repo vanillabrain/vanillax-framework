@@ -1,14 +1,14 @@
-group 'vanillax-framework'
+group 'vanillax.framework'
 version '0.9-SNAPSHOT'
 
 apply plugin: 'groovy'
-apply plugin: 'java'
+apply plugin: 'java-library'
+apply plugin: 'com.novoda.bintray-release'
 
 sourceCompatibility = 1.8
 
 repositories {
     jcenter()
-    mavenCentral()
 }
 
 dependencies {
@@ -23,3 +23,15 @@ dependencies {
     compile project(':vanillax-webmvc')
 }
 
+publish {
+    artifactId = 'vanillax-batch'
+    publishVersion = '1.0.0'
+    desc = 'VanillaX Batch'
+    userOrg = POM_DEVELOPER_ID
+    groupId = GROUP
+    website = POM_URL
+    repoName = BINTRAY_REPO_NAME
+    bintrayUser = BINTRAY_USER
+    bintrayKey = BINTRAY_KEY
+    dryRun = false
+}

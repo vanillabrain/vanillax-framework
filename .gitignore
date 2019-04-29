@@ -9,3 +9,4 @@ out/
 logs/
 *.log
 *.log.*
+gradle-local.properties

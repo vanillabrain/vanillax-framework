@@ -87,7 +87,7 @@ public class MvcServletBase extends HttpServlet {
 
     /**
      * 경로에 해당하는 서비스를 검색한다.
-     * eg) /serveltContextName/my/company/employee/1234 --> my.company.employee
+     * eg) /serveltContextName/my/company/employee/1234 --) my.company.employee
      * @param request
      * @return
      * @throws Exception
@@ -104,13 +104,13 @@ public class MvcServletBase extends HttpServlet {
     }
 
     /**
-     * Request의 메타 정보를 찾아서 생성해준다. <br/>
-     * _request : HttpServletRequest <br/>
-     * _response : HttpServletResponse <br/>
-     * _service : IService.id 값. eg) my.company.employee <br/>
-     * _path : request.getPathInfo()에서 서비스 id를 제외한 뒷부분. 통상 ID값으로 간주하는 숫자가 온다. <br/>
-     *   eg) /serveltContextName/my/company/employee/1234 --> 1234 <br/>
-     *       /serveltContextName/my/company/employee --> "" <br/>
+     * Request의 메타 정보를 찾아서 생성해준다. <br>
+     * _request : HttpServletRequest <br>
+     * _response : HttpServletResponse <br>
+     * _service : IService.id 값. eg) my.company.employee <br>
+     * _path : request.getPathInfo()에서 서비스 id를 제외한 뒷부분. 통상 ID값으로 간주하는 숫자가 온다. <br>
+     *   eg) /serveltContextName/my/company/employee/1234 --) 1234 <br>
+     *       /serveltContextName/my/company/employee --) "" <br>
      * @param data 서비스를 처리하는데 사용하는 입력 데이터. 메타 데이터를이 입력된다.
      * @param request
      * @param response

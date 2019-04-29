@@ -1,14 +1,15 @@
-group 'vanillax-framework'
-version '1.0-SNAPSHOT'
+group 'vanillax.framework'
+version '0.9-SNAPSHOT'
 
 apply plugin: 'groovy'
-apply plugin: 'java'
+apply plugin: 'java-library'
+apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'war'
 
 sourceCompatibility = 1.8
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -31,4 +32,17 @@ dependencies {
 
 war {   //war 플러그인 설정,
     archiveName = "${baseName}.${extension}"                            // 버전이름 지우기 위한 조치
+}
+
+publish {
+    artifactId = 'vanillax-webmvc'
+    publishVersion = '1.0.0'
+    desc = 'VanillaX Web MVC'
+    userOrg = POM_DEVELOPER_ID
+    groupId = GROUP
+    website = POM_URL
+    repoName = BINTRAY_REPO_NAME
+    bintrayUser = BINTRAY_USER
+    bintrayKey = BINTRAY_KEY
+    dryRun = false
 }
