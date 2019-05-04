@@ -1,16 +1,12 @@
 <template>
   <b-row>
     <b-col cols="12" xl="6">
-      <transition name="slide">
-      <b-card :header="caption">
         <grid :rowData="data"
           :columnData="columns"
           :options="options"
           @check="onCheck"
           @uncheck="onUnCheck"
         ></grid>
-      </b-card>
-      </transition>
     </b-col>
   </b-row>
 </template>
