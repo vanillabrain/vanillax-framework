@@ -74,7 +74,7 @@ public class MvcServletBase extends HttpServlet {
     protected Object readContent(HttpServletRequest request)throws Exception{
         JsonSlurper json = new JsonSlurper().setType(JsonParserType.LAX);
         if(request.getContentLength()<=0){
-            return json.parseText("{}");
+            return new LinkedHashMap(4);
         }
         Object object = json.parse(request.getInputStream(),"UTF-8");
         if(object instanceof Map){
