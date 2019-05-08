@@ -26,6 +26,7 @@ import vanillax.framework.core.util.StringUtil;
 import vanillax.framework.core.util.DateUtil;
 import vanillax.framework.webmvc.config.ConfigHelper;
 import vanillax.framework.webmvc.exception.BaseException;
+import vanillax.framework.webmvc.service.IFilter;
 import vanillax.framework.webmvc.service.IService;
 
 import javax.servlet.ServletException;
@@ -66,6 +67,7 @@ public class JsonServlet extends MvcServletBase {
         Object result = null;
         boolean onError = false;
         String callback = request.getParameter("callback");
+        List<IFilter> filterList = null;
         try{
             String method = request.getMethod();
             service = this.searchService(request);
@@ -88,9 +90,9 @@ public class JsonServlet extends MvcServletBase {
             data.put("_input", inputParam);
 
             //Filter초기화
-            initFilters();
+            filterList = makeFilterList();
             //Filter 전처리
-            data = filterPreprocess(data);
+            data = filterPreprocess(filterList, data);
 
             String method1 = (String)inputParam.remove("_method");
             if(method1 ==null || "find".equals(method1)){
@@ -121,9 +123,9 @@ public class JsonServlet extends MvcServletBase {
             }else if("insert".equals(method1)){
                 result = service.insert(data);
             }else if("update".equals(method1)){
-                service.update(data);
+                result = service.update(data);
             }else if("delete".equals(method1)){
-                service.delete(data);
+                result = service.delete(data);
             }else{
                 Map<String, String> errorMap = new LinkedHashMap<String, String>();
                 errorMap.put("_result", "ERROR");
@@ -134,7 +136,7 @@ public class JsonServlet extends MvcServletBase {
             }
             //Filter 후처리. 전처리 역순. 오류가 발생하지 않을경우만 처리.
             if(!onError){
-                result = filterPostprocess(result);
+                result = filterPostprocess(filterList, result);
             }
         }catch(Exception e){
             String stackTrace = StringUtil.errorStackTraceToString(e);
@@ -157,6 +159,8 @@ public class JsonServlet extends MvcServletBase {
         }finally {
             TransactionManager.getInstance().clearTxSession();//Transaction 관련 데이터를 초기화한다.
             ConnectionMonitor.getInstance().onThreadFinished();//Thread종료시 close되지 않은 Connection이 있는지 검사한다.
+            if(filterList != null)
+                filterList.clear(); //필터 정리
         }
         if(callback != null) {//jsonp처리일 경우
             response.setContentType("text/plain; charset=UTF-8");

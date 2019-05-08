@@ -144,12 +144,12 @@ public class MvcServletBase extends HttpServlet {
      * Filter를 초기화한다. vanilla.properties내에 script.filters 값으로 정의되어진 클래스를 로딩한다.
      * @throws Exception Filter로 정의된 클래스들이 IFilter객체가 아닐 경우.
      */
-    protected void initFilters() throws Exception{
+    private void initFilters() throws Exception{
         String s = ConfigHelper.get("script.filters");
         if(s == null)
             return;
-        //filter class를 로딩한지 30초가 지나지 않은경우는 그냥 패스.
-        if(System.currentTimeMillis() - filterInitializedTime < 30*1000)
+        //filter class를 로딩한지 10초가 지나지 않은경우는 그냥 패스.
+        if(System.currentTimeMillis() - filterInitializedTime < 10*1000)
             return;
         s.replaceAll(";",",");
         s.replaceAll(" ","");
@@ -171,14 +171,28 @@ public class MvcServletBase extends HttpServlet {
     }
 
     /**
+     * 필터 객체를 초기화하고 필터리스트를 생성한다
+     * @return 새로운 필터리스트 생성
+     * @throws Exception Groovy 객체 로딩실패시
+     */
+    protected List<IFilter> makeFilterList()throws Exception{
+        initFilters();
+        List<IFilter> list = new ArrayList<>(this.filters.size());
+        for(IFilter filter:this.filters){
+            list.add(filter);
+        }
+        return list;
+    }
+
+    /**
      * 필터 전처리
      * @param data 입력 데이터
      * @return 입력데이터에 전처리후 결과 추가하여 반환한다.
      * @throws Exception
      */
-    protected Map<String,Object> filterPreprocess(Map<String,Object> data)throws Exception{
+    protected Map<String,Object> filterPreprocess(List<IFilter> filterList, Map<String,Object> data)throws Exception{
         //Filter 전처리
-        for(IFilter filter:filters){
+        for(IFilter filter:filterList){
             data = filter.preprocess(data);
         }
         return data;
@@ -190,9 +204,9 @@ public class MvcServletBase extends HttpServlet {
      * @return
      * @throws Exception
      */
-    protected Object filterPostprocess(Object data)throws Exception{
-        for(int i= 0; i < filters.size(); i++){
-            IFilter filter= filters.get(filters.size() - 1 - i);
+    protected Object filterPostprocess(List<IFilter> filterList, Object data)throws Exception{
+        for(int i= 0; i < filterList.size(); i++){
+            IFilter filter= filterList.get(filterList.size() - 1 - i);
             data = filter.postprocess(data);
         }
         return data;

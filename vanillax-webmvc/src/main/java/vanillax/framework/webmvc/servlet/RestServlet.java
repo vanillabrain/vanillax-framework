@@ -23,6 +23,7 @@ import vanillax.framework.core.db.monitor.ConnectionMonitor;
 import vanillax.framework.core.util.json.JsonOutput;
 import vanillax.framework.webmvc.config.ConfigHelper;
 import vanillax.framework.webmvc.exception.BaseException;
+import vanillax.framework.webmvc.service.IFilter;
 import vanillax.framework.webmvc.service.IService;
 import vanillax.framework.core.util.DateUtil;
 
@@ -53,6 +54,7 @@ public class RestServlet extends MvcServletBase {
         Object json = null;
         Object result = null;
         boolean onError = false;
+        List<IFilter> filterList = null;
         try{
             String method = request.getMethod();
             service = this.searchService(request);
@@ -61,9 +63,9 @@ public class RestServlet extends MvcServletBase {
             this.setBaseData(data, request, response, service.getId());
 
             //Filter초기화
-            initFilters();
+            filterList = makeFilterList();
             //Filter 전처리
-            data = filterPreprocess(data);
+            data = filterPreprocess(filterList, data);
 
             if(method.equals("GET")) {
                 // URI path에 마지막이 ID로 입력되는 경우 기본으로는 findOne을 호출하고 ID값이 입력되지 않은 경우 기본적으로 findMany를 호출한다.
@@ -93,9 +95,9 @@ public class RestServlet extends MvcServletBase {
             } else if(method.equals("POST")) {
                 result = service.insert(data);
             } else if(method.equals("PUT")) {
-                service.update(data);
+                result = service.update(data);
             } else if(method.equals("DELETE")) {
-                service.delete(data);
+                result = service.delete(data);
             } else {
                 String errMsg1 = localStrings.getString("http.method_not_implemented");
                 Map<String, String> errorMap = new LinkedHashMap<String, String>();
@@ -108,7 +110,7 @@ public class RestServlet extends MvcServletBase {
 
             //Filter 후처리. 전처리 역순. 오류가 발생하지 않을경우만 처리.
             if(!onError){
-                result = filterPostprocess(result);
+                result = filterPostprocess(filterList, result);
             }
 
         }catch(Exception e){
@@ -131,6 +133,8 @@ public class RestServlet extends MvcServletBase {
         }finally {
             TransactionManager.getInstance().clearTxSession();//Transaction 관련 데이터를 초기화한다.
             ConnectionMonitor.getInstance().onThreadFinished();//Thread종료시 close되지 않은 Connection이 있는지 검사한다.
+            if(filterList != null)
+                filterList.clear(); //필터 정리
         }
         response.setContentType("application/json; charset=UTF-8");
 
