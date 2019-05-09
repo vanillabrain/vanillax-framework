@@ -148,25 +148,40 @@ public class MvcServletBase extends HttpServlet {
         String s = ConfigHelper.get("script.filters");
         if(s == null)
             return;
-        //filter class를 로딩한지 10초가 지나지 않은경우는 그냥 패스.
-        if(System.currentTimeMillis() - filterInitializedTime < 10*1000)
+        //filter class를 로딩한지 10초가 지나지 않은 경우는 그냥 패스.
+        int graceTimeSec = 10;
+        if(System.currentTimeMillis() - filterInitializedTime < graceTimeSec*1000)
             return;
-        s.replaceAll(";",",");
-        s.replaceAll(" ","");
-        String[] arr = s.split(",");
-        filters.clear();
-        for(String x:arr){
-            if("".equals(x.trim()))
-                continue;
-            Object obj = ObjectLoader.load(x.trim());
-            if(obj == null)
-                continue;
-            if(obj instanceof IFilter){
-                filters.add((IFilter)obj);
-            }else{
-                throw new Exception("Filter는 "+IFilter.class.getCanonicalName()+" 객체만 허용됩니다.");
+        List<IFilter> oldList = null;
+        synchronized (MvcServletBase.class){
+            if(System.currentTimeMillis() - filterInitializedTime < graceTimeSec*1000) //Lock 결려있는 동안 시간이 지날 수 있다. 그래서 한번더 확인한다.
+                return;
+            s.replaceAll(";",",");
+            s.replaceAll(" ","");
+            String[] arr = s.split(",");
+            List<IFilter> newList = new ArrayList<>(8);
+            Set<String> dupCheckSet = new HashSet<>(8);
+            for(String x:arr){
+                String className = x.trim();
+                if("".equals(className))
+                    continue;
+                Object obj = ObjectLoader.load(className);//이게 비용이 비싸다. 매번 호출되는 것을 고려해야한다.
+                if(obj == null)
+                    continue;
+                if(obj instanceof IFilter){
+                    if(dupCheckSet.contains(className)){
+                        throw new Exception("Filter 클래스가 중복 선언되어있습니다 : "+className);
+                    }
+                    newList.add((IFilter)obj);
+                    dupCheckSet.add(className);
+                }else{
+                    throw new Exception("Filter는 "+IFilter.class.getCanonicalName()+" 객체만 허용됩니다.");
+                }
             }
+            oldList = filters;
+            filters = newList;
         }
+        oldList.clear();
         filterInitializedTime = System.currentTimeMillis();
     }
 
@@ -177,9 +192,11 @@ public class MvcServletBase extends HttpServlet {
      */
     protected List<IFilter> makeFilterList()throws Exception{
         initFilters();
-        List<IFilter> list = new ArrayList<>(this.filters.size());
-        for(IFilter filter:this.filters){
-            list.add(filter);
+        List<IFilter> list = new ArrayList<>(8);
+        synchronized (MvcServletBase.class) {
+            for (IFilter filter : this.filters) {
+                list.add(filter);
+            }
         }
         return list;
     }
