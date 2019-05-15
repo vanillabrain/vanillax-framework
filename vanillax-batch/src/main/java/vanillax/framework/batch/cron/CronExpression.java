@@ -242,7 +242,7 @@ public class CronExpression {
 
     /**
      * 현재 시간이 cron 표현식내의 유효한 시간값에 포함이 되는지 확인한다.
-     * @return
+     * @return 현재시간 cron 표현식에 유효한 값일경우 true 반환
      */
     public boolean isNowOnTime(){
         ZonedDateTime now = ZonedDateTime.now().withNano(0);

@@ -46,10 +46,10 @@ public class HttpHelper {
 
     /**
      * GET 하는 경우
-     * @param url
-     * @param encoding
-     * @return
-     * @throws Exception
+     * @param url 호출할 URL
+     * @param encoding 결과 문자 인코딩 값
+     * @return HTTP Response 결과
+     * @throws Exception HTTP 요청 오류 발생시
      */
     public static String get(String url, String encoding) throws Exception {
         String response = null;
@@ -141,10 +141,10 @@ public class HttpHelper {
 
     /**
      * json 타입으로 POST 하는 경우
-     * @param url
-     * @param body
-     * @return
-     * @throws Exception
+     * @param url 요청 대상 URL
+     * @param body 요청 Content
+     * @return HTTP 결과 body 값
+     * @throws Exception HTTP 요청 오류발시 돌출
      */
     public static String postJson(String url, String body) throws Exception {
         String response;

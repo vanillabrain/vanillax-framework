@@ -38,8 +38,8 @@ public class ServiceLoader {
     /**
      * Service 객체를 로딩한다.
      * @param path 예) "/top/news"
-     * @return
-     * @throws Exception
+     * @return 경로와 일치하는 서비스 객체
+     * @throws Exception 객체를 찾지못할경우 발생
      */
     public static IService load(String path)throws Exception{
         initBasePackageList();
