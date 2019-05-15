@@ -16,18 +16,24 @@ dependencies {
     def tomcatVersion = '8.0.21'
     compile 'org.codehaus.groovy:groovy-all:2.4.7'
 
+    providedCompile "org.apache.tomcat:tomcat-servlet-api:${tomcatVersion}"
+
+    testCompile "org.apache.tomcat:tomcat-catalina:${tomcatVersion}"
+    testCompile "org.apache.tomcat:tomcat-coyote:${tomcatVersion}"
+    testCompile "org.apache.tomcat:tomcat-jasper:${tomcatVersion}"
+    testCompile "org.apache.tomcat:tomcat-jdbc:${tomcatVersion}"
+
+    testCompile "mysql:mysql-connector-java:5.1.45"
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
     testCompile 'org.apache.logging.log4j:log4j-core:2.7'
     testCompile 'org.apache.logging.log4j:log4j-api:2.7'
     testCompile 'org.apache.logging.log4j:log4j-jul:2.7'
 
-    providedCompile "mysql:mysql-connector-java:5.1.45"
-    providedCompile "org.apache.tomcat:tomcat-catalina:${tomcatVersion}"
-    providedCompile "org.apache.tomcat:tomcat-coyote:${tomcatVersion}"
-    providedCompile "org.apache.tomcat:tomcat-jasper:${tomcatVersion}"
-    providedCompile "org.apache.tomcat:tomcat-jdbc:${tomcatVersion}"
-
     compile project(':vanillax-core')
+}
+
+javadoc {
+    options.encoding = 'UTF-8'
 }
 
 war {   //war 플러그인 설정,
@@ -36,7 +42,7 @@ war {   //war 플러그인 설정,
 
 publish {
     artifactId = 'vanillax-webmvc'
-    publishVersion = '1.0.3'
+    publishVersion = '1.0.4'
     desc = 'VanillaX Web MVC'
     userOrg = POM_DEVELOPER_ID
     groupId = GROUP

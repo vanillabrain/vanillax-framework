@@ -22,6 +22,10 @@ dependencies {
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
 }
 
+javadoc {
+    options.encoding = 'UTF-8'
+}
+
 publish {
     artifactId = 'vanillax-core'
     publishVersion = '1.0.0'
