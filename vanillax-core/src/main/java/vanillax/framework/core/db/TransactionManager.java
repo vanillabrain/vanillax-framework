@@ -58,7 +58,9 @@ public class TransactionManager {
     /**
      * transaction 시작이 선언되고 중간 단계에서 ConnectionManager에 의해 입력된다.
      * startTxSession()이 실행되지 않았다면 강제로 startTxSession()을 호출한다.
+     * @param dataSourceName DataSource 명
      * @param connection IConnectionManager에 의해 생성된 Connection객체
+     * @throws Exception autoCommit여부 가져올 때 발생할 수 있다
      */
     public void addConnection(String dataSourceName, Connection connection)throws Exception{
         Stack<TransactionSession> stack = stackThreadLocal.get();
@@ -77,9 +79,9 @@ public class TransactionManager {
 
     /**
      * 현재 레벨에서 사용중인 dataSourceName의 Connection을 반환한다.
-     * @param dataSourceName
-     * @return
-     * @throws Exception
+     * @param dataSourceName DataSource 명
+     * @return Transaction관리중에 있는 현재 Conection
+     * @throws Exception N/A
      */
     public Connection getCurrentConnection(String dataSourceName) throws  Exception{
         Stack<TransactionSession> stack = stackThreadLocal.get();
@@ -93,7 +95,7 @@ public class TransactionManager {
     /**
      * Transaction을 종료한다.
      * 정상적인 종료를 처리한다. commit을 수행한다.
-     * @throws Exception
+     * @throws Exception Connection.close()시 발생할 수 있다
      */
     public void finishTxSession()throws Exception{
         Stack<TransactionSession> stack = stackThreadLocal.get();

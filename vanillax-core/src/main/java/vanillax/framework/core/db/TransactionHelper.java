@@ -9,8 +9,8 @@ public class TransactionHelper {
 
     /**
      * obj의 클래스 단위로 Transactional annotation이 정의되어있거나 methodName의 메소드에 Transactional annotatioin이 정의되어있는지 확인한다.
-     * @param obj
-     * @param methodName
+     * @param obj 판별 대상 객체
+     * @param methodName 판별할 메소드 명
      * @return -1 : transactional이 아니다. 0:Transaction이다.
      */
     public static int isTransactional(Object obj, String methodName){

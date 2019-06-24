@@ -46,7 +46,7 @@ public class JsonOutput {
 //    private static final String DEFAULT_TIMEZONE = "GMT";
     private static final String DEFAULT_TIMEZONE = "Asia/Seoul";
 
-    /**
+    /*
      * "null" for a null value, or a JSON array representation for a collection, array, iterator or enumeration,
      * or representation for other object.
      */
@@ -400,8 +400,9 @@ public class JsonOutput {
     /**
      * Pretty print a JSON payload.
      *
-     * @param jsonPayload
+     * @param jsonPayload jsonPayload
      * @return a pretty representation of JSON payload.
+     * @throws JsonCharWriter 객체에 물자열 추가시 오류발생하면 돌출한다
      */
     public static String prettyPrint(String jsonPayload) throws Exception{
         int indentSize = 0;

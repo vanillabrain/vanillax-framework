@@ -58,9 +58,9 @@ abstract public class AbstractConnectionManager implements IConnectionManager{
 
     /**
      * Tx매니저의 관리를 받는 Connection을 가져온다.
-     * @param dataSourceName
-     * @return
-     * @throws Exception
+     * @param dataSourceName dataSource 명
+     * @return dataSource 내의 connection 반환
+     * @throws Exception Connection이 close되었을 경우 오류생성
      */
     @Override
     public Connection getConnection(String dataSourceName)throws Exception{
@@ -102,9 +102,10 @@ abstract public class AbstractConnectionManager implements IConnectionManager{
     /**
      * Tx매니저의 관리를 받지 않는 Connection을 가져온다.
      * 사용자가 직접 Conntion.close()를 호출해야한다.
-     * @param dataSourceName
-     * @return
-     * @throws Exception
+     * @param dataSourceName dataSource 명
+     * @param autoCommit autoCommit 여부
+     * @return dataSource내의 Connection 객체
+     * @throws Exception DataSource를 찾을 수 없나가 Connection이 close되었을 경우
      */
     public Connection getConnectionRaw(String dataSourceName, boolean autoCommit)throws Exception{
         if(!this.dataSourceMap.containsKey(dataSourceName)){

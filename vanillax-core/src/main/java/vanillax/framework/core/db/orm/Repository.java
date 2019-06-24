@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Repository {
-    /** 사용할 DataSource 이름 */
+    /* 사용할 DataSource 이름 */
     public String value() default Constants.DEFAULT_DATA_SOURCE;
 }
