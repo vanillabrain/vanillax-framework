@@ -402,7 +402,7 @@ public class JsonOutput {
      *
      * @param jsonPayload jsonPayload
      * @return a pretty representation of JSON payload.
-     * @throws JsonCharWriter 객체에 물자열 추가시 오류발생하면 돌출한다
+     * @throws Exception JsonCharWriter 객체에 물자열 추가시 오류발생하면 돌출한다
      */
     public static String prettyPrint(String jsonPayload) throws Exception{
         int indentSize = 0;

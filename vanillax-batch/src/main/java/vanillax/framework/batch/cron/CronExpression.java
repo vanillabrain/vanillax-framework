@@ -72,7 +72,7 @@ import java.util.regex.Pattern;
  *
  * <P>
  * 주의 : 요일이 월요일(1)부터 사작된다! &quot;SUN-MON&quot; 은 허용되지 않는다. &quot;SUN,MON&quot;은 허용된다.
- * <P>
+ * </P>
  * <P>
  * '*' Can be used in all fields and means 'for all values'. E.g. &quot;*&quot; in minutes, means 'for all minutes'
  * <P>

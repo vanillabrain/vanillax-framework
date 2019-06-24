@@ -92,6 +92,8 @@ public class WorkerScheduler {
     /**
      * Worker를 스케줄에 등록한다.
      * @param scheduleInfo 실생 스크립트 정보
+     * @param initialDelay 초기 delay값
+     * @return Worker ID
      */
     public int arrangeWorkerOnSchedule(ScheduleInfo scheduleInfo, Integer initialDelay)throws Exception{
         if(scheduleInfo == null) {
@@ -123,7 +125,10 @@ public class WorkerScheduler {
 
     /**
      * Worker를 실행시킨다. 일회만 실행한다. 반복하지 않는다.
+     * @param initialDelay 초기 delay 값
      * @param scheduleInfo 실생 스크립트 정보
+     * @return 실행 Worker의 ID
+     * @throws Exception 구동중인 동일 script가 있을 경우
      */
     public int startWorkerOnce(ScheduleInfo scheduleInfo, Integer initialDelay) throws Exception{
         String script = scheduleInfo.getScript();

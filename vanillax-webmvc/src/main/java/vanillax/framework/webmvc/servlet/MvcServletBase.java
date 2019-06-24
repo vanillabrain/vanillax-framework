@@ -204,6 +204,7 @@ public class MvcServletBase extends HttpServlet {
     /**
      * 필터 전처리
      * @param data 입력 데이터
+     * @param filterList 처리할 필더 객체들의 리스트
      * @return 입력데이터에 전처리후 결과 추가하여 반환한다.
      * @throws Exception 전처리 수행시 SQL혹은 로직 오류시 발생
      */
@@ -218,6 +219,7 @@ public class MvcServletBase extends HttpServlet {
     /**
      * 필터 후처리
      * @param data 본처리의 결과 데이터
+     * @param filterList 후처리할 필터들의 리스트
      * @return 후처리후 데이터
      * @throws Exception 후처리시 SQL이나 로직 오류시 발생
      */
