@@ -9,7 +9,12 @@ import groovy.lang.Closure;
 import groovy.util.Expando;
 import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 
+import java.beans.Transient;
 import java.io.*;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
@@ -177,11 +182,67 @@ public class JsonOutput {
     }
 
     private static Map<?, ?> getObjectProperties(Object object) {
-        Map<?, ?> properties = DefaultGroovyMethods.getProperties(object);
+        Map<?, ?> properties = DefaultGroovyMethods.getProperties(object);//getter, setter가 있는 필드가 모두 추출된다
         properties.remove("class");
         properties.remove("declaringClass");
         properties.remove("metaClass");
+        //transient modifier가 있거나 getter 메소드가 없거나 getter 메소드에 @Transient 가 있으면 그 필드는 무시한다.
+        if(!(object instanceof Map)){
+            Iterator<?> iterator = properties.keySet().iterator();
+            List<String> exceptList = new ArrayList<>();
+            while(iterator.hasNext()){
+                String s = (String)iterator.next();
+                if(!isJsonExtractingProperty(object.getClass(), s)){
+                    exceptList.add(s);
+                }
+            }
+            for(String except:exceptList){
+                properties.remove(except);
+            }
+        }
         return properties;
+    }
+
+    /**
+     * JSon 문자로 변환하기위한 대상의 필드 인지 확인한다.
+     * field에 transient가 정의되어있으면 제외된다.
+     * getter가 없으면 제외된다.
+     * getter 메소드에 @Transient가 있으면 제외된다
+     * @param clazz 검사할 대상의 클래스
+     * @param fieldName 추출대상의 필드
+     * @return getter가 존재하는 transient 정의가 없는 필드이면 true반환
+     */
+    private static boolean isJsonExtractingProperty(Class clazz, String fieldName){
+
+        try {
+            //transient modifier가 있으면 추출 대상이 아니다
+            Field field = clazz.getDeclaredField(fieldName);
+            boolean isTransient = Modifier.isTransient(field.getModifiers());
+            if (isTransient)
+                return false;
+        }catch (Exception ignore){
+            //do nothing
+        }
+
+        try {
+            //getter method가 있는지 확인한다.
+            //필드가 없더라도 getter가 있으면 추출한다.
+            Method[] methods = clazz.getMethods();
+            for(Method method:methods){
+                String c1 = (fieldName.charAt(0)+"").toUpperCase();
+                String s1 = "get"+c1+fieldName.substring(1);//camelCase
+                if(method.getName().equals("get"+fieldName) || method.getName().equals(s1)){
+                    //@Transient가 있으면 무시한다.
+                    if (!method.isAnnotationPresent((Class<? extends Annotation>) Transient.class)){
+                        return true;
+                    }
+                }
+            }
+        }catch (Exception e){
+            //do nothing
+//            e.printStackTrace();
+        }
+        return false;
     }
 
     /**
