@@ -32,6 +32,10 @@ dependencies {
     compile project(':vanillax-core')
 }
 
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
 javadoc {
     options.encoding = 'UTF-8'
 }
@@ -42,7 +46,7 @@ war {   //war 플러그인 설정,
 
 publish {
     artifactId = 'vanillax-webmvc'
-    publishVersion = '1.0.6'
+    publishVersion = '1.0.7'
     desc = 'VanillaX Web MVC'
     userOrg = POM_DEVELOPER_ID
     groupId = GROUP

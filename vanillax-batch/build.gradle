@@ -31,13 +31,17 @@ dependencies {
     compile project(':vanillax-webmvc')
 }
 
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
 javadoc {
     options.encoding = 'UTF-8'
 }
 
 publish {
     artifactId = 'vanillax-batch'
-    publishVersion = '1.0.6'
+    publishVersion = '1.0.7'
     desc = 'VanillaX Batch'
     userOrg = POM_DEVELOPER_ID
     groupId = GROUP
