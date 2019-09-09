@@ -51,15 +51,20 @@ public class ConfigHelper {
     public static String get(String key, String defaultValue){
         if(prop == null)
             return null;
-        if(!prop.containsKey(key))
-            return defaultValue;
-        return prop.getProperty(key);
+
+        if(prop.containsKey(key)) {
+            String s = prop.getProperty(key);
+            if (s != null) {
+                return s.trim();
+            }
+        }
+        return defaultValue;
     }
 
     public static int getInt(String key){
         if(prop == null || !prop.containsKey(key))
             throw new RuntimeException("No contains key : "+key);
-        String str = prop.getProperty(key);
+        String str = get(key);
         return Integer.parseInt(str);
     }
 
@@ -69,15 +74,13 @@ public class ConfigHelper {
         if(!prop.containsKey(key)){
             return defaultValue;
         }
-        String str = prop.getProperty(key);
-        return Integer.parseInt(str);
+        return Integer.parseInt(get(key));
     }
 
     public static float getFloat(String key){
         if(prop == null || !prop.containsKey(key))
             throw new RuntimeException("No contains key : "+key);
-        String str = prop.getProperty(key);
-        return Float.parseFloat(str);
+        return Float.parseFloat(get(key));
     }
 
     public static float getFloat(String key, float defaultValue){
@@ -86,15 +89,13 @@ public class ConfigHelper {
         if(!prop.containsKey(key)){
             return defaultValue;
         }
-        String str = prop.getProperty(key);
-        return Float.parseFloat(str);
+        return Float.parseFloat(get(key));
     }
 
     public static double getDouble(String key){
         if(prop == null || !prop.containsKey(key))
             throw new RuntimeException("No contains key : "+key);
-        String str = prop.getProperty(key);
-        return Double.parseDouble(str);
+        return Double.parseDouble(get(key));
     }
 
     public static double getDouble(String key, double defaultValue){
@@ -103,14 +104,13 @@ public class ConfigHelper {
         if(!prop.containsKey(key)){
             return defaultValue;
         }
-        String str = prop.getProperty(key);
-        return Double.parseDouble(str);
+        return Double.parseDouble(get(key));
     }
 
     public static boolean getBoolean(String key){
         if(prop == null || !prop.containsKey(key))
             throw new RuntimeException("No contains key : "+key);
-        String str = prop.getProperty(key);
+        String str = get(key);
         if(str == null){
             throw new RuntimeException("No contains key : "+key);
         }
@@ -129,7 +129,7 @@ public class ConfigHelper {
         if(!prop.containsKey(key)){
             return defaultValue;
         }
-        String str = prop.getProperty(key);
+        String str = get(key);
         if(str == null){
             return defaultValue;
         }
