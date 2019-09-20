@@ -76,15 +76,16 @@ public class WorkerDefault extends WorkerBase {
             }
             //본처리
             action = ActionLoader.load(this.scheduleInfo.getMainScript());
-            if(action != null) {
-                if(result == null){
-                    result = new HashMap<>();
-                }
-                if(result instanceof Map){
-                    ((Map)result).put("_param", this.scheduleInfo.getInputParam());
-                }
-                result = action.process(result);
+            if(action == null){
+                throw new Exception("Not found script file : "+this.scheduleInfo.getMainScript());
             }
+            if(result == null){
+                result = new HashMap<>();
+            }
+            if(result instanceof Map){
+                ((Map)result).put("_param", this.scheduleInfo.getInputParam());
+            }
+            result = action.process(result);
             //후처리
             action = ActionLoader.load(this.scheduleInfo.getPostScript());
             if(action != null) {
