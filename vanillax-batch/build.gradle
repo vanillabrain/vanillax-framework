@@ -41,7 +41,7 @@ javadoc {
 
 publish {
     artifactId = 'vanillax-batch'
-    publishVersion = '1.0.7'
+    publishVersion = '1.0.8'
     desc = 'VanillaX Batch'
     userOrg = POM_DEVELOPER_ID
     groupId = GROUP
