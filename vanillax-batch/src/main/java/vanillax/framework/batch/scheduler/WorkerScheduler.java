@@ -94,6 +94,7 @@ public class WorkerScheduler {
      * @param scheduleInfo 실생 스크립트 정보
      * @param initialDelay 초기 delay값
      * @return Worker ID
+     * @throws Exception Worker가 이미 등록되었을 경우 발생
      */
     public int arrangeWorkerOnSchedule(ScheduleInfo scheduleInfo, Integer initialDelay)throws Exception{
         if(scheduleInfo == null) {
