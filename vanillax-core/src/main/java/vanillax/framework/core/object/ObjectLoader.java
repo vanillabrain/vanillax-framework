@@ -84,8 +84,8 @@ public class ObjectLoader {
      * GroovyObject 객체를 로딩한다.
      * 변경유무를 확인하여 변경되었을 경우 다시 로딩한다.
      * @param className 예) "com.hello.GagaObject"
-     * @return
-     * @throws Exception
+     * @return Autowired 필드까지 모두 적용된 Groovy 객체를 반환한다.
+     * @throws Exception 클래스를 찾을 수 없거나, 상호참조할 경우 오류를 생성
      */
     public static GroovyObject load(String className)throws Exception{
         if(className == null)
@@ -154,8 +154,8 @@ public class ObjectLoader {
     /**
      * Groovy 클래스를 로딩한다
      * @param className 클래스 이름
-     * @return
-     * @throws Exception
+     * @return 로딩된 Groovy 클래스를반환
+     * @throws Exception 클래스를 찾을 수 없을 경우 오류 생성
      */
     synchronized public static Class<GroovyObject> loadGroovyClass(String className)throws Exception{
 

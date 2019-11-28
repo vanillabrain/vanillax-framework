@@ -27,8 +27,8 @@ public class ActionLoader {
     /**
      * Service 객체를 로딩한다.
      * @param path 예) "my.package.Hello"
-     * @return
-     * @throws Exception
+     * @return path와 일치하는 Action 객체
+     * @throws Exception GroovyObject 로딩시 발생하는 오류
      */
     public static IAction load(String path)throws Exception {
         return (IAction) ObjectLoader.load(path);

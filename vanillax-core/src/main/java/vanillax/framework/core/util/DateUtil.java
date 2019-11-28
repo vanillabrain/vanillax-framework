@@ -75,9 +75,9 @@ public class DateUtil {
     }
 
     /**
-     * for groovy
-     * @param map
-     * @param targetKey
+     * long 형 숫자를 Date객체로 변환한다
+     * @param map 변환 대상의 Map
+     * @param targetKey 변환할 key값들
      */
     public static void long2DateMap(Map map, List targetKey){
         if(map == null || targetKey == null || map.size() == 0 || targetKey.size() == 0)
@@ -86,9 +86,9 @@ public class DateUtil {
     }
 
     /**
-     * for groovy
-     * @param list
-     * @param targetKey
+     * long 형 숫자를 Date객체로 변환한다
+     * @param list 변환할 대상의 List
+     * @param targetKey 변환할 key값들
      */
     public static void long2DateList(List list, List targetKey){
         if(list == null || targetKey == null || list.size() == 0 || targetKey.size() == 0)

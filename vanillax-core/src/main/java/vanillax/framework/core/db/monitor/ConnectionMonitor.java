@@ -60,8 +60,8 @@ public class ConnectionMonitor {
     /**
      * DataSource.getConnection()호출시 사용하는 메소드이다.
      * Connection정보를 Hashtable에 저장한다.
-     * @param connectionId
-     * @param traces
+     * @param connectionId 처리할 대상의 Connection ID
+     * @param traces .getConnection()이 호출된  method stack
      */
     public void onGetConnection(String connectionId, StackTraceElement[] traces){
         long threadId = Thread.currentThread().getId();
@@ -72,7 +72,7 @@ public class ConnectionMonitor {
     /**
      * Connection.close() 호출시 사용되는 메소드이다.
      * Connection정보를 Hashtable에서 제거한다.
-     * @param connectionId
+     * @param connectionId colose할 대상의 Connection ID
      */
     public void onClose(String connectionId){
         ConnectionMonitorInfo info = activeConnectionTable.remove(connectionId);

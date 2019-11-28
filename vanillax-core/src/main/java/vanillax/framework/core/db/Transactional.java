@@ -11,6 +11,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Transactional {
-    /** auto-commit 여부 */
+    /* auto-commit 여부 */
     public boolean autoCommit() default true;
 }

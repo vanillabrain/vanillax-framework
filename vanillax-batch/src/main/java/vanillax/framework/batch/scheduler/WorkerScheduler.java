@@ -74,7 +74,7 @@ public class WorkerScheduler {
 
     /**
      * Crawler 스크립트를 수행하는 Worker를 모두 구동시킨다. 1초의 간격을 두고 구동하기 때문에 시간차가 발생한다.
-     * @throws Exception
+     * @throws Exception 스케줄 등록 발생하는 오류 돌출
      */
     public void crawlerSchedulerStart()throws Exception {
         List<String> list = ScheduleInfoRepository.getInstance().getScheduleList();
@@ -92,6 +92,9 @@ public class WorkerScheduler {
     /**
      * Worker를 스케줄에 등록한다.
      * @param scheduleInfo 실생 스크립트 정보
+     * @param initialDelay 초기 delay값
+     * @return Worker ID
+     * @throws Exception Worker가 이미 등록되었을 경우 발생
      */
     public int arrangeWorkerOnSchedule(ScheduleInfo scheduleInfo, Integer initialDelay)throws Exception{
         if(scheduleInfo == null) {
@@ -123,7 +126,10 @@ public class WorkerScheduler {
 
     /**
      * Worker를 실행시킨다. 일회만 실행한다. 반복하지 않는다.
+     * @param initialDelay 초기 delay 값
      * @param scheduleInfo 실생 스크립트 정보
+     * @return 실행 Worker의 ID
+     * @throws Exception 구동중인 동일 script가 있을 경우
      */
     public int startWorkerOnce(ScheduleInfo scheduleInfo, Integer initialDelay) throws Exception{
         String script = scheduleInfo.getScript();
@@ -171,7 +177,7 @@ public class WorkerScheduler {
 
     /**
      * script에 해당하는 스케줄을 모두 취소시킨다. 작동중인 worker가 있으면 interrupt를 건다.
-     * @param script
+     * @param script 예) my.script.object
      */
     public void cancelWorker(String script){
         Set<Integer> set = this.workerScriptIdMap.get(script);
@@ -203,8 +209,8 @@ public class WorkerScheduler {
 
     /**
      * script가 지금 작동중인 쓰레드가 있는지 확인한다. scheduler상에서는 cancel처리 되었더라도 아직 작동중인 경우가 있을 수 있다.
-     * @param script
-     * @return
+     * @param script 예) my.script.object
+     * @return 구동중인 Worker가 있으면 true 반환
      */
     public boolean hasScriptOnProcess(String script){
         if(!this.workerScriptIdMap.containsKey(script)){
@@ -303,7 +309,7 @@ public class WorkerScheduler {
 
     /**
      * 주기적으로 작동되는 script가 있는지 확인한다.
-     * @param script
+     * @param script  예) my.script.object
      * @return scheduler에 등록되어있고 cancel 처리가 되어있지 않으면 true를 반환한다.
      */
     public boolean hasScheduledWorker(String script){

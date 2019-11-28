@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.velocity.context.InternalContextAdapter;
 import org.apache.velocity.exception.MethodInvocationException;
@@ -122,24 +123,39 @@ public class InDirective extends RepeatDirective {
         StringWriter buffer = new StringWriter();
 
         while (iterator.hasNext()) {
+            value = iterator.next();
+
+            boolean empty = false;
+
+            if(value instanceof Map){
+                Map m = (Map)value;
+                if(m.size() == 0){
+                    empty = true;
+                }
+            }
 
             if (counter == 0) {
                 buffer.append(this.column);
                 buffer.append(" ").append(getClauseSqlName()).append(" ");
                 buffer.append(this.open); // In starts
+            }else if(!empty){
+                buffer.append(this.separator);
             }
 
-            value = iterator.next();
             put(context, this.var, value);
             foreach.index++;
             foreach.hasNext = iterator.hasNext();
 
             try {
-                if (value == null) {
-                    if (nullHolderContext == null) {
-                        nullHolderContext = new NullHolderContext(this.var, context);
-                    }
-                    node.jjtGetChild(node.jjtGetNumChildren() - 1).render(nullHolderContext, buffer);
+
+                if (empty) {
+                    //nothing
+                }else if (value == null) {
+//                    if (nullHolderContext == null) {
+//                        nullHolderContext = new NullHolderContext(this.var, context);
+//                    }
+//                    node.jjtGetChild(node.jjtGetNumChildren() - 1).render(nullHolderContext, buffer);
+                    buffer.append("null");
                 } else {
                     node.jjtGetChild(node.jjtGetNumChildren() - 1).render(context, buffer);
                 }
@@ -156,7 +172,7 @@ public class InDirective extends RepeatDirective {
             counter++;
 
             if (iterator.hasNext()) {
-                buffer.append(this.separator);
+                //buffer.append(this.separator);
             }else{
                 buffer.append(this.close);
             }

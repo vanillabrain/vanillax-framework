@@ -67,9 +67,9 @@ public class MvcServletBase extends HttpServlet {
 
     /**
      * JSON POST 데이터를 읽어서 List, Map 객체로 변환하여 반환한다.
-     * @param request
+     * @param request body값을 읽기위한 Request객체
      * @return 데이터가 존재하지 않을경우 빈 Map객체가 반환된다.
-     * @throws Exception
+     * @throws Exception JSON 파싱오류시 발생
      */
     protected Object readContent(HttpServletRequest request)throws Exception{
         JsonSlurper json = new JsonSlurper().setType(JsonParserType.LAX);
@@ -88,9 +88,9 @@ public class MvcServletBase extends HttpServlet {
     /**
      * 경로에 해당하는 서비스를 검색한다.
      * eg) /serveltContextName/my/company/employee/1234 --) my.company.employee
-     * @param request
-     * @return
-     * @throws Exception
+     * @param request 서비스를 찾기위한 Request 객체. path를 얻어 서비스를 찾는다.
+     * @return 경로와 일치하는 서비스 객체
+     * @throws Exception 서비스 객체를 로딩하다 실패한 경우 발생
      */
     protected IService searchService(HttpServletRequest request)throws Exception{
         String path = request.getPathInfo();//"/servlet/toplist/213" --> "/toplist/213"
@@ -112,10 +112,10 @@ public class MvcServletBase extends HttpServlet {
      *   eg) /serveltContextName/my/company/employee/1234 --) 1234 <br>
      *       /serveltContextName/my/company/employee --) "" <br>
      * @param data 서비스를 처리하는데 사용하는 입력 데이터. 메타 데이터를이 입력된다.
-     * @param request
-     * @param response
+     * @param request 서비스에 넘겨주기위한 Reuqest 객체
+     * @param response 서비스에 넘겨주기위한 Response 객체
      * @param id IService를 찾는데 사용했던 경로. eg) my/company/employee
-     * @throws Exception
+     * @throws Exception NONE
      */
     protected void setBaseData(Map<String,Object> data, HttpServletRequest request, HttpServletResponse response, String id)throws Exception{
         data.put("_request",request);
@@ -204,8 +204,9 @@ public class MvcServletBase extends HttpServlet {
     /**
      * 필터 전처리
      * @param data 입력 데이터
+     * @param filterList 처리할 필더 객체들의 리스트
      * @return 입력데이터에 전처리후 결과 추가하여 반환한다.
-     * @throws Exception
+     * @throws Exception 전처리 수행시 SQL혹은 로직 오류시 발생
      */
     protected Map<String,Object> filterPreprocess(List<IFilter> filterList, Map<String,Object> data)throws Exception{
         //Filter 전처리
@@ -218,8 +219,9 @@ public class MvcServletBase extends HttpServlet {
     /**
      * 필터 후처리
      * @param data 본처리의 결과 데이터
-     * @return
-     * @throws Exception
+     * @param filterList 후처리할 필터들의 리스트
+     * @return 후처리후 데이터
+     * @throws Exception 후처리시 SQL이나 로직 오류시 발생
      */
     protected Object filterPostprocess(List<IFilter> filterList, Object data)throws Exception{
         for(int i= 0; i < filterList.size(); i++){

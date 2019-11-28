@@ -36,7 +36,7 @@ public class StringUtil {
      *   [3] : aa/bb/cc/dd
      * @param path 분리할 문자열 예) "aa/bb/cc/dd"
      * @return 분리한 문자열 리스트
-     * @throws Exception
+     * @throws Exception path 값이 null인 경우
      */
     public static List<String> extractPathArr(String path)throws Exception {
         if(path == null){
@@ -187,9 +187,9 @@ public class StringUtil {
 
     /**
      * SQL in문에서 사용하기 위해 list내에 있는 key값을 뽑아서 ,로 구분한 문자열을 생성한다.
-     * @param list
-     * @param key
-     * @return
+     * @param list item 리스트
+     * @param key in문에 사용할 key
+     * @return 예) 'a','b','c'
      */
     public static String makeInString(List<Map<String,Object>> list, String key){
         if(list == null || key == null)

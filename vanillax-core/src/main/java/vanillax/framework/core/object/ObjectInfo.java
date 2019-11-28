@@ -120,7 +120,7 @@ public class ObjectInfo {
     /**
      * Class및 하위 Class가 변경되었는지 여부 판단.
      * @param delayAvailable 판단을 유예할지 여부. true이면 최근 확인시간으부터 2초내에는 변경되지 않은 것으로 처리.
-     * @return
+     * @return 해당 객체 혹은 하위객체가 변경되었을 경우 true 반환
      */
     public boolean isModified(boolean delayAvailable){
         //Autowired로 참조관계에 있는 하위의 클래스들이 변경되었을 경우 이 클래스도 변경되었다고 판단한다.

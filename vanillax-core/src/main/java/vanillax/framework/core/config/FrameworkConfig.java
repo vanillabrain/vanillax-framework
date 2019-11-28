@@ -38,27 +38,34 @@ public class FrameworkConfig {
         if(reload != null)
             return reload;
         if(prop != null && prop.containsKey("script.reload"))
-            reload = "true".equals(prop.getProperty("script.reload"));
+            reload = "true".equals(get("script.reload"));
+
         return reload;
     }
 
     public static String get(String key){
         if(prop == null)
             return null;
-        return prop.getProperty(key);
+        if(prop.containsKey(key)){
+            String s = prop.getProperty(key);
+            if(s != null){
+                return s.trim();
+            }
+        }
+
+        return null;
     }
 
     public static int getInt(String key){
         if(prop == null || !prop.containsKey(key))
             throw new RuntimeException("No contains key : "+key);
-        String str = prop.getProperty(key);
-        return Integer.parseInt(str);
+        return Integer.parseInt(get(key));
     }
 
     public static int getInt(String key, int defaultValue){
         if(prop == null || !prop.containsKey(key))
             return defaultValue;
-        String str = prop.getProperty(key);
+        String str = get(key);
         int result = defaultValue;
         try{
             result = Integer.parseInt(str);
@@ -69,14 +76,14 @@ public class FrameworkConfig {
     public static double getDouble(String key){
         if(prop == null || !prop.containsKey(key))
             throw new RuntimeException("No contains key : "+key);
-        String str = prop.getProperty(key);
+        String str = get(key);
         return Double.parseDouble(str);
     }
 
     public static double getDouble(String key, double defaultValue){
         if(prop == null || !prop.containsKey(key))
             return defaultValue;
-        String str = prop.getProperty(key);
+        String str = get(key);
         double result = defaultValue;
         try{
             result = Double.parseDouble(str);
@@ -87,14 +94,14 @@ public class FrameworkConfig {
     public static boolean getBoolean(String key){
         if(prop == null || !prop.containsKey(key))
             throw new RuntimeException("No contains key : "+key);
-        String str = prop.getProperty(key);
+        String str = get(key);
         return Boolean.valueOf(str);
     }
 
     public static boolean getBoolean(String key, boolean defaultValue){
         if(prop == null || !prop.containsKey(key))
             return defaultValue;
-        String str = prop.getProperty(key);
+        String str = get(key);
         boolean result = defaultValue;
         try{
             result = Boolean.valueOf(str);

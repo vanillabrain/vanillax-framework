@@ -19,8 +19,7 @@ class scheduleLog extends ServiceBase {
         def param = [script:script]
         param['startTime'] = new Timestamp(System.currentTimeMillis() - 30*1000)
         def map = scheduleLogDAO.selectScheduleLogLast(param)
-        data.secheduleLog = map
-        return data
+        return [secheduleLog : map]
     }
 
     private def validate(data){

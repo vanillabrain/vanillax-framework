@@ -73,9 +73,10 @@ public class WorkerBase implements IWorker {
             //본처리
             this.lastStartedTime = System.currentTimeMillis();
             IAction action = ActionLoader.load(this.scheduleInfo.getScript());
-            if(action != null) {
-                result = action.process(result);
+            if(action == null){
+                throw new Exception("Not found script file : "+this.scheduleInfo.getMainScript());
             }
+            result = action.process(result);
         }catch(Exception e){
             log.warning("스케줄 실행중 오류가 발생했습니다. "+this.scheduleInfo.getScript() + " : "+ e.getMessage());
         }finally {

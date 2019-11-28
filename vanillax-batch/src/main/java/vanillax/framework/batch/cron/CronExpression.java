@@ -72,7 +72,7 @@ import java.util.regex.Pattern;
  *
  * <P>
  * 주의 : 요일이 월요일(1)부터 사작된다! &quot;SUN-MON&quot; 은 허용되지 않는다. &quot;SUN,MON&quot;은 허용된다.
- * <P>
+ * </P>
  * <P>
  * '*' Can be used in all fields and means 'for all values'. E.g. &quot;*&quot; in minutes, means 'for all minutes'
  * <P>
@@ -242,7 +242,7 @@ public class CronExpression {
 
     /**
      * 현재 시간이 cron 표현식내의 유효한 시간값에 포함이 되는지 확인한다.
-     * @return
+     * @return 현재시간 cron 표현식에 유효한 값일경우 true 반환
      */
     public boolean isNowOnTime(){
         ZonedDateTime now = ZonedDateTime.now().withNano(0);
