@@ -1,6 +1,7 @@
 package vanillax.framework.core.db;
 
 import java.sql.Connection;
+import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
@@ -16,6 +17,8 @@ public class TransactionManager {
     private static TransactionManager instance = null;
     private static ThreadLocal<Stack<TransactionSession>> stackThreadLocal = new ThreadLocal<Stack<TransactionSession>>();
 
+    DecimalFormat formatter = null;
+
     public static TransactionManager getInstance(){
         if(instance == null){
             synchronized (TransactionManager.class){
@@ -29,6 +32,7 @@ public class TransactionManager {
 
     private TransactionManager(){
         try {
+            formatter = new DecimalFormat("#,###");
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -108,9 +112,20 @@ public class TransactionManager {
         try{
             for(String dataSourceName:set){
                 Connection c = connectionMap.get(dataSourceName);
-                if(!c.getAutoCommit())
+                if(!c.getAutoCommit()){
+                    long start = System.currentTimeMillis();
                     c.commit();
+                    long duration = System.currentTimeMillis() - start;
+                    if(duration > 5L * 1000L){//5초이상의 시간이 소요되면 로그를 찍어준다
+                        log.info("Connection["+c+"] committing took : "+ formatter.format(duration) +" ms");
+                    }
+                }
+                long start = System.currentTimeMillis();
                 c.close();
+                long duration = System.currentTimeMillis() - start;
+                if(duration > 5L * 1000L){//5초이상의 시간이 소요되면 로그를 찍어준다
+                    log.info("Connection["+c+"] closing took : "+ formatter.format(duration) +" ms");
+                }
             }
         }catch(Exception e){
             //commit중에 오류가 발생할 경우 나머지 rollback하고 모두 close한다.
@@ -125,6 +140,7 @@ public class TransactionManager {
             stack.add(currSession);
             throw e;
         }
+        log.info("transaction finished");
     }
 
     /**

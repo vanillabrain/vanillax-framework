@@ -78,7 +78,7 @@ public class ConnectionMonitor {
         ConnectionMonitorInfo info = activeConnectionTable.remove(connectionId);
         if(info == null)
             return;
-        if(System.currentTimeMillis() - info.getActiveStartTime() > ACTIVE_DURATION_FOR_LOG*1000){
+        if(System.currentTimeMillis() - info.getActiveStartTime() > 10*1000){//임시로 10초에 로그를 기록하게 수정
             String msg = "Connection ["+info.connectionId+"] on Thread-"+info.threadId+" just closed. Active Time : "
                     + formatter.format(System.currentTimeMillis() - info.activeStartTime) + "ms. Actived "
                     + StringUtil.stackTraceToString(info.traces);
