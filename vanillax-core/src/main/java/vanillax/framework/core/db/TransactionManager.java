@@ -129,7 +129,7 @@ public class TransactionManager {
                     log.info("Connection["+c+"] closing took : "+ formatter.format(duration) +" ms");
                 }
             }
-        }catch(Exception e){
+        }catch(Throwable e){
             //commit중에 오류가 발생할 경우 나머지 rollback하고 모두 close한다.
             for(String dataSourceName:set){
                 Connection c = connectionMap.get(dataSourceName);

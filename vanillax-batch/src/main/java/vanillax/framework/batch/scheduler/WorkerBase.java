@@ -77,7 +77,7 @@ public class WorkerBase implements IWorker {
                 throw new Exception("Not found script file : "+this.scheduleInfo.getMainScript());
             }
             result = action.process(result);
-        }catch(Exception e){
+        }catch(Throwable e){
             log.warning("스케줄 실행중 오류가 발생했습니다. "+this.scheduleInfo.getScript() + " : "+ e.getMessage());
         }finally {
             setScriptOnProcess(false);

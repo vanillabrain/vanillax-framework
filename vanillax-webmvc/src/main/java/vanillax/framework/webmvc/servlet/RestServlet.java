@@ -113,7 +113,7 @@ public class RestServlet extends MvcServletBase {
                 result = filterPostprocess(filterList, result);
             }
 
-        }catch(Exception e){
+        }catch(Throwable e){
             String stackTrace = StringUtil.errorStackTraceToString(e);
             log.warning("서비스 실행중 오류가 발생했습니다 : " + stackTrace);
             Map<String, String> errorMap = new LinkedHashMap<String, String>();

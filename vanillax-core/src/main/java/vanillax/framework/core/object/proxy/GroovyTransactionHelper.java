@@ -19,9 +19,13 @@ public class GroovyTransactionHelper {
             TransactionManager.getInstance().startTxSession(txAutoCommit);
             closure.call();
             TransactionManager.getInstance().finishTxSession();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             TransactionManager.getInstance().finishTxSessionOnError();
-            throw e;
+            if(e instanceof Exception)
+                throw (Exception)e;
+            else{
+                throw new Exception(e);
+            }
         } finally {
 
         }

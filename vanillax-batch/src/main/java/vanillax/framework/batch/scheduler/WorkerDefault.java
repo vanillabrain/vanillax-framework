@@ -96,7 +96,7 @@ public class WorkerDefault extends WorkerBase {
             if(startLogger != null){
                 endLogger.process(scheduleLogDoc);
             }
-        }catch(Exception e){
+        }catch(Throwable e){
             if(e instanceof InterruptedException){
                 log.info("Worker가 정지당했습니다 : "+this.scheduleInfo.getScript());
             }else{
@@ -114,7 +114,7 @@ public class WorkerDefault extends WorkerBase {
                 if(action != null) {
                     result = action.process(this.scheduleInfo, e);
                 }
-            }catch(Exception errEx){
+            }catch(Throwable errEx){
                 log.warning("스케줄 오류처리중 오류가 발생했습니다 : "+this.scheduleInfo.getScript() + " : "+ errEx.getMessage());
             }
         }finally {
