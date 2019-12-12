@@ -32,7 +32,7 @@ javadoc {
 
 publish {
     artifactId = 'vanillax-core'
-    publishVersion = '1.0.3'
+    publishVersion = '1.0.4'
     desc = 'VanillaX Core'
     userOrg = POM_DEVELOPER_ID
     groupId = GROUP
