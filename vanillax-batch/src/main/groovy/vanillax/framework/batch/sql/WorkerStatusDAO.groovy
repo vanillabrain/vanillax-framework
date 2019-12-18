@@ -7,6 +7,7 @@ import vanillax.framework.core.db.orm.Select
 import vanillax.framework.core.db.orm.Update
 import vanillax.framework.core.db.script.Velocity
 
+//Deprecated
 @Repository("vanillax_batch") //Spring Repository와 같은 개념. DataSource 이름을 value로 입력
 interface WorkerStatusDAO {
 

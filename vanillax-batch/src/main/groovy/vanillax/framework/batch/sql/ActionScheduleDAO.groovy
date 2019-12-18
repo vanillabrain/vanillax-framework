@@ -22,7 +22,7 @@ interface ActionScheduleDAO {
             A.orderSeq as "orderSeq",
             A.scheduleType as "scheduleType",
             A.cron as "cron"
-         from ActionSchedule A, ActionSchedule B
+         from VXBATCH_ActionSchedule A, VXBATCH_ActionSchedule B
         where A.script != 'GLOBAL_CONFIG'
           and B.script = 'GLOBAL_CONFIG'
           #if($script)

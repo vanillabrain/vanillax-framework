@@ -23,17 +23,17 @@ import vanillax.framework.core.db.Transactional
 import vanillax.framework.core.object.Autowired
 
 /**
- * 스케줄러가 가동될때 실댕되는 Action이다.
- * 스케줄러의 스케줄 정보를 DB에서 읽어서 ScheduleConfigLoader에게 전달한다.
- * 비정상적으로 수행중이던 Action을 TERMINATED상태로 변경한다.
- * Worker명령이 완료되지 않은 건도 TERMINATED상태로 변경한다.
+ * Sequence 번호 채번한다
+ *
+ *
+ *
  */
 @Log
-class CommonSequence extends ActionBase{
+class CommonSequence{
     @Autowired
     CommonSequenceDataDAO commonSequenceDataDAO
 
-    @Transactional(autoCommit = true)
+    @Transactional
     def curval(String sequenceName){
         def cur = commonSequenceDataDAO.selectCommonSequenceData([sequenceName:sequenceName])
         if(!cur)

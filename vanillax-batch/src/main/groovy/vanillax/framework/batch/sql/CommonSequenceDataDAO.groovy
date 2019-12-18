@@ -9,7 +9,7 @@ import vanillax.framework.core.db.orm.Update
 interface CommonSequenceDataDAO {
 
     @Update(''' 
-        UPDATE CommonSequenceData 
+        UPDATE VXBATCH_CommonSequenceData 
         SET sequenceCurValue = :sequenceCurValue, 
             sequenceCycle = :sequenceCycle
         WHERE sequenceName=:sequenceName
@@ -17,7 +17,7 @@ interface CommonSequenceDataDAO {
     int updateCommonSequenceData(Map x)
 
     @Insert('''
-        INSERT INTO CommonSequenceData(
+        INSERT INTO VXBATCH_CommonSequenceData(
             sequenceName, sequenceIncrement, sequenceMinValue, 
             sequenceMaxValue, sequenceCurValue, sequenceCycle
         ) 
@@ -33,7 +33,7 @@ interface CommonSequenceDataDAO {
             sequenceMaxValue as "sequenceMaxValue",
             sequenceCurValue as "sequenceCurValue",
             sequenceCycle as "sequenceCycle" 
-        FROM CommonSequenceData 
+        FROM VXBATCH_CommonSequenceData 
         WHERE sequenceName = :sequenceName
      ''')
     Map selectCommonSequenceData(Map x) //단건조회

@@ -97,13 +97,13 @@ public class WorkerDefault extends WorkerBase {
                 endLogger.process(scheduleLogDoc);
             }
         }catch(Throwable e){
-            if(e instanceof InterruptedException){
-                log.info("Worker가 정지당했습니다 : "+this.scheduleInfo.getScript());
-            }else{
-                log.warning("스케줄 실행중 오류가 발생했습니다. "+this.scheduleInfo.getScript() + " : "+ e.getMessage());
-            }
-
             try{
+                if(e instanceof InterruptedException){
+                    log.info("Worker가 정지당했습니다 : "+this.scheduleInfo.getScript());
+                }else{
+                    log.warning("스케줄 실행중 오류가 발생했습니다. "+this.scheduleInfo.getScript() + " : "+ e.getMessage());
+                }
+
                 //공통에러로그 처리
                 IErrorAction scheduleErrorLogger = (IErrorAction)ActionLoader.load(ConfigHelper.get("schedule.errorLogger"));
                 if(scheduleErrorLogger != null && scheduleLogDoc != null) {
@@ -118,10 +118,14 @@ public class WorkerDefault extends WorkerBase {
                 log.warning("스케줄 오류처리중 오류가 발생했습니다 : "+this.scheduleInfo.getScript() + " : "+ errEx.getMessage());
             }
         }finally {
-            setScriptOnProcess(false);
-            this.lastWorkedTime = System.currentTimeMillis();//종료시간 입력
-            TransactionManager.getInstance().clearTxSession();//Thread가 끝났으니 Transaction을 완전히 초기화한다.
-            ConnectionMonitor.getInstance().onThreadFinished();//Thread끝날때 Connection확인
+            try {
+                setScriptOnProcess(false);
+                this.lastWorkedTime = System.currentTimeMillis();//종료시간 입력
+                TransactionManager.getInstance().clearTxSession();//Thread가 끝났으니 Transaction을 완전히 초기화한다.
+                ConnectionMonitor.getInstance().onThreadFinished();//Thread끝날때 Connection확인
+            }catch(Throwable e){
+                log.warning(e.getMessage());
+            }
         }
     }
 }

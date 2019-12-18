@@ -80,10 +80,14 @@ public class WorkerBase implements IWorker {
         }catch(Throwable e){
             log.warning("스케줄 실행중 오류가 발생했습니다. "+this.scheduleInfo.getScript() + " : "+ e.getMessage());
         }finally {
-            setScriptOnProcess(false);
-            this.lastWorkedTime = System.currentTimeMillis();
-            TransactionManager.getInstance().clearTxSession();//Thread가 끝났으니 Transaction을 완전히 초기화한다.
-            ConnectionMonitor.getInstance().onThreadFinished();//Thread끝날때 Connection확인
+            try {
+                setScriptOnProcess(false);
+                this.lastWorkedTime = System.currentTimeMillis();
+                TransactionManager.getInstance().clearTxSession();//Thread가 끝났으니 Transaction을 완전히 초기화한다.
+                ConnectionMonitor.getInstance().onThreadFinished();//Thread끝날때 Connection확인
+            }catch (Throwable e){
+                log.warning(e.getMessage());
+            }
         }
     }
 

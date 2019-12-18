@@ -11,7 +11,7 @@ import vanillax.framework.core.db.script.Velocity
 interface ScheduleLogDAO {
 
     @Update(''' 
-        UPDATE ScheduleLog
+        UPDATE VXBATCH_ActionScheduleLog
         SET
             statusCode='TERM',
             modUser='spider',
@@ -22,7 +22,7 @@ interface ScheduleLogDAO {
 
     @Velocity
     @Update(''' 
-        update ScheduleLog
+        update VXBATCH_ActionScheduleLog
             set statusCode = :statusCode,
                 #if($error) 
                     error = :error,
@@ -36,7 +36,7 @@ interface ScheduleLogDAO {
     int updateScheduleLog(Map x)
 
     @Insert('''
-        INSERT INTO ScheduleLog(id, script, startTime, statusCode, actionCount, error, endTime, duration, regUser, regDate)
+        INSERT INTO VXBATCH_ActionScheduleLog(id, script, startTime, statusCode, actionCount, error, endTime, duration, regUser, regDate)
         VALUES(:id, :script, :nowDate, 'DO', 0, null, null, null, 'spider', :nowDate)
      ''')
     def insertScheduleLog(Map x) //단건입력
@@ -52,7 +52,7 @@ interface ScheduleLogDAO {
             error as "error",
             endTime as "endTime",
             duration as "duration"
-        FROM ScheduleLog 
+        FROM VXBATCH_ActionScheduleLog 
         WHERE script = :script
           AND startTime > :startTime
         ORDER BY id DESC
