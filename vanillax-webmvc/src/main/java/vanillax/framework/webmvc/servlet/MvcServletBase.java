@@ -96,7 +96,7 @@ public class MvcServletBase extends HttpServlet {
         String path = request.getPathInfo();//"/servlet/toplist/213" --> "/toplist/213"
         IService serviceTmp = ServiceLoader.load(path);
         if(serviceTmp == null){
-            String msg = "경로에 해당하는 서비스를 찾을 수 없습니다 : "+path;
+            String msg = "Service not found : "+path;//경로에 해당하는 서비스를 찾을 수 없습니다
             log.warning(msg);
             throw new Exception(msg);
         }
@@ -170,12 +170,12 @@ public class MvcServletBase extends HttpServlet {
                     continue;
                 if(obj instanceof IFilter){
                     if(dupCheckSet.contains(className)){
-                        throw new Exception("Filter 클래스가 중복 선언되어있습니다 : "+className);
+                        throw new Exception("Filter class declared duplicated : "+className);//Filter 클래스가 중복 선언되어있습니다
                     }
                     newList.add((IFilter)obj);
                     dupCheckSet.add(className);
                 }else{
-                    throw new Exception("Filter는 "+IFilter.class.getCanonicalName()+" 객체만 허용됩니다.");
+                    throw new Exception("Filter allow "+IFilter.class.getCanonicalName()+" only");//객체만 허용됩니다.
                 }
             }
             oldList = filters;

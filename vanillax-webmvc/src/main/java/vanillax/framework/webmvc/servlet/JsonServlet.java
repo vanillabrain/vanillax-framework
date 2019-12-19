@@ -140,7 +140,7 @@ public class JsonServlet extends MvcServletBase {
             }
         }catch(Throwable e){
             String stackTrace = StringUtil.errorStackTraceToString(e);
-            log.warning("서비스 실행중 오류가 발생했습니다 : " + stackTrace);
+            log.warning("Error occurred during process the service : " + stackTrace);//서비스 실행중 오류가 발생했습니다
             Map<String, String> errorMap = new LinkedHashMap<String, String>();
             errorMap.put("_result", "ERROR");
             errorMap.put("message", e.getMessage());

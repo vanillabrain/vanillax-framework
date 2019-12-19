@@ -184,8 +184,8 @@ public class ObjectLoader {
          */
         if(onLoadingClasses.containsKey(className)){
             onLoadingClasses.remove(className);
-            log.severe("로딩중인 클래스는 다시 로딩을 시도할 수 없습니다 : "+className);
-            throw new Exception("로딩중인 클래스는 다시 로딩을 시도할 수 없습니다 : "+className);
+            log.severe("The Class on loading couldn't be load again : "+className);// 로딩중인 클래스는 다시 로딩을 시도할 수 없습니다
+            throw new Exception("The Class on loading couldn't be load again : "+className);
         }
 
         onLoadingClasses.put(className, System.currentTimeMillis());
@@ -200,8 +200,8 @@ public class ObjectLoader {
             clazz = groovyClassLoader1.parseClass(groovyCode, groovyFileName);
             // 클래스명과 ID가 일치하지 않을 경우 오류발생.
             if (!className.equals(clazz.getName())) {
-                log.severe("코드내의 클래스명 혹은 패키지명이 제시된 이름과 일치하지 않습니다 : " + className +" / " + clazz.getName());
-                throw new Exception("코드내의 클래스명 혹은 패키지명이 제시된 이름과 일치하지 않습니다 : " + className +" / " + clazz.getName());
+                log.severe("Class or package name doesn't match to : " + className +" / " + clazz.getName());//코드내의 클래스명 혹은 패키지명이 제시된 이름과 일치하지 않습니다
+                throw new Exception("Class or package name doesn't match to : " + className +" / " + clazz.getName());
             }
 
             createObjectInfo(clazz, file);
@@ -239,7 +239,7 @@ public class ObjectLoader {
         //SQL 정의 interface를 읽어서 RepositoryBase클래스로 생성한다.
         if(clazz.isAnnotationPresent(Repository.class)){
             if(!clazz.isInterface()){
-                throw new Exception("@Repository 정의는 Interface만 허용됩니다 : "+clazz.getName());
+                throw new Exception("@Repository definition can be used on Interface: "+clazz.getName());
             }
             long currentTime = System.currentTimeMillis();
             String proxySrc = GroovySqlProxyUtil.makeProxySrc(clazz, clazz.getSimpleName()+"_sqlProxy"+currentTime);
@@ -399,7 +399,7 @@ public class ObjectLoader {
                         && !class1.isAnnotationPresent(Repository.class)
                         && !class1.getName().startsWith("vanillax.")
                 ) {
-                    throw new Exception("GroovyObject가 아닌 클래스는 @Autowired로 선언할 수 없습니다");
+                    throw new Exception("None GroovyObject can't be declare as @Autowired");
                 }
                 //Field의 클래스를 참조 클래스로 간주한다.
                 objectInfo.putReferencedClass(field.getName(), class1.getName());
@@ -415,7 +415,7 @@ public class ObjectLoader {
             } else if (type == null || "".equals(type) || "singleton".equals(type)) {
                 objectInfo.setInstanceType(Constants.INSTANCE_TYPE_SINGLETON);
             } else {
-                throw new Exception("@InstanceType은 다음 값을 허용하지 않습니다 : " + type);
+                throw new Exception("@InstanceType doesn't allow following value : " + type);
             }
         }
         cache.put(clazz.getName(), objectInfo);//방금 로딩된 클래스를 캐시에 넣는다.

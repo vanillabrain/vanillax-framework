@@ -20,6 +20,7 @@ import vanillax.framework.batch.action.IAction;
 import vanillax.framework.batch.action.ActionLoader;
 import vanillax.framework.core.db.TransactionManager;
 import vanillax.framework.core.db.monitor.ConnectionMonitor;
+import vanillax.framework.core.util.StringUtil;
 
 import java.util.logging.Logger;
 
@@ -78,7 +79,7 @@ public class WorkerBase implements IWorker {
             }
             result = action.process(result);
         }catch(Throwable e){
-            log.warning("스케줄 실행중 오류가 발생했습니다. "+this.scheduleInfo.getScript() + " : "+ e.getMessage());
+            log.warning("스케줄 실행중 오류가 발생했습니다. "+this.scheduleInfo.getScript() + " : "+ StringUtil.errorStackTraceToString(e));
         }finally {
             try {
                 setScriptOnProcess(false);
@@ -86,7 +87,7 @@ public class WorkerBase implements IWorker {
                 TransactionManager.getInstance().clearTxSession();//Thread가 끝났으니 Transaction을 완전히 초기화한다.
                 ConnectionMonitor.getInstance().onThreadFinished();//Thread끝날때 Connection확인
             }catch (Throwable e){
-                log.warning(e.getMessage());
+                log.warning(StringUtil.errorStackTraceToString(e));
             }
         }
     }

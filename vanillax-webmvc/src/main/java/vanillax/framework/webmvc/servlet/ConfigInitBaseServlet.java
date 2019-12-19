@@ -46,7 +46,7 @@ public class ConfigInitBaseServlet implements ServletContextListener {
             String initFileName = "vanilla-init.properties";
             input = Thread.currentThread().getContextClassLoader().getResourceAsStream(initFileName);
             if(input==null){
-                log.info("설정파일 'vanilla-init.properties'를 찾을 수 없습니다");
+                log.info("Properties file 'vanilla-init.properties' not found");//설정파일 'vanilla-init.properties'를 찾을 수 없습니다
             }else{
                 prop.load(input);
             }
@@ -61,7 +61,7 @@ public class ConfigInitBaseServlet implements ServletContextListener {
 
             input = ConfigInitBaseServlet.class.getClassLoader().getResourceAsStream(filename);
             if(input==null){
-                log.warning("설정파일 'vanilla.properties'를 찾을 수 없습니다");
+                log.warning("Properties file 'vanilla.properties' not found");//설정파일 'vanilla.properties'를 찾을 수 없습니다
                 return;
             }
 
@@ -105,7 +105,7 @@ public class ConfigInitBaseServlet implements ServletContextListener {
             log.info("script.base.path : "+prop.getProperty("script.base.path"));
             log.info("script.reload : " + prop.getProperty("script.reload"));
         } catch (IOException ex) {
-            log.warning("서비스 초기화중 오류가 발생했습니다 : " + StringUtil.errorStackTraceToString(ex));
+            log.warning("Error occurred during initializing the service : " + StringUtil.errorStackTraceToString(ex));//서비스 초기화중 오류가 발생했습니다
         } finally{
             if(input!=null){
                 try {input.close();} catch (IOException e) {}

@@ -21,6 +21,7 @@ import vanillax.framework.batch.action.ActionLoader;
 import vanillax.framework.batch.action.IErrorAction;
 import vanillax.framework.core.db.TransactionManager;
 import vanillax.framework.core.db.monitor.ConnectionMonitor;
+import vanillax.framework.core.util.StringUtil;
 import vanillax.framework.webmvc.config.ConfigHelper;
 
 import java.util.HashMap;
@@ -99,9 +100,9 @@ public class WorkerDefault extends WorkerBase {
         }catch(Throwable e){
             try{
                 if(e instanceof InterruptedException){
-                    log.info("Worker가 정지당했습니다 : "+this.scheduleInfo.getScript());
+                    log.info("Worker is interrupted : "+this.scheduleInfo.getScript());
                 }else{
-                    log.warning("스케줄 실행중 오류가 발생했습니다. "+this.scheduleInfo.getScript() + " : "+ e.getMessage());
+                    log.warning("Error occurred during process the worker. "+this.scheduleInfo.getScript() + " : "+ e.getMessage());
                 }
 
                 //공통에러로그 처리
@@ -115,7 +116,11 @@ public class WorkerDefault extends WorkerBase {
                     result = action.process(this.scheduleInfo, e);
                 }
             }catch(Throwable errEx){
-                log.warning("스케줄 오류처리중 오류가 발생했습니다 : "+this.scheduleInfo.getScript() + " : "+ errEx.getMessage());
+                try {
+                    log.warning("Error occurred during Exception handling : "+this.scheduleInfo.getScript() + "\n" +StringUtil.errorStackTraceToString(errEx));
+                }catch (Throwable t){
+                    t.printStackTrace();
+                }
             }
         }finally {
             try {
@@ -124,7 +129,11 @@ public class WorkerDefault extends WorkerBase {
                 TransactionManager.getInstance().clearTxSession();//Thread가 끝났으니 Transaction을 완전히 초기화한다.
                 ConnectionMonitor.getInstance().onThreadFinished();//Thread끝날때 Connection확인
             }catch(Throwable e){
-                log.warning(e.getMessage());
+                try {
+                    log.warning(StringUtil.errorStackTraceToString(e));
+                }catch (Throwable t){
+                    t.printStackTrace();
+                }
             }
         }
     }
