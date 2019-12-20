@@ -49,7 +49,7 @@ public class GroovySqlProxyUtil {
                 Class paramClass = null;
                 String paramClassName = "";
                 if(m.getParameterCount() > 1){
-                    throw new Exception("SQL 객체 메소드는 단일한 인자만 허용합니다 : "+m.getName());
+                    throw new Exception("SQL Object's methods cound get one parameter : "+m.getName());//SQL 객체 메소드는 단일한 인자만 허용합니다
                 }
                 if(m.getParameterCount() > 0){
                     paramClass = m.getParameterTypes()[0];
@@ -58,7 +58,7 @@ public class GroovySqlProxyUtil {
 
                 String checkString = m.getName() + "/" + m.getParameterCount();
                 if(dupCheckSet.contains(checkString)){
-                    throw new Exception("함수 이름이 중복되었습니다 : "+m.getName()+"("+paramClassName+")");
+                    throw new Exception("Function name is duplicated : "+m.getName()+"("+paramClassName+")");//함수 이름이 중복되었습니다
                 }
                 dupCheckSet.add(checkString);
                 String returnType = m.getReturnType().getSimpleName().toLowerCase();
@@ -99,12 +99,12 @@ public class GroovySqlProxyUtil {
                 }else if(m.isAnnotationPresent(Delete.class)){
                     sb.append("this.delete");
                 }else{
-                    throw new Exception("@Repository Interface는 SQL 유형 Annotation을 반드시 명시해야합니다 : "+interfaceClass.getName()+"."+m.getName()+"()");
+                    throw new Exception("@Repository interfaces should have SQL annotation : "+interfaceClass.getName()+"."+m.getName()+"()");//@Repository Interface는 SQL 유형 Annotation을 반드시 명시해야합니다
                 }
 
                 if(m.isAnnotationPresent(Select.class)){
                     if(paramClass.isAssignableFrom(List.class)){
-                        throw new Exception("@Select는 List를 인자로 허용하지 않습니다 : "+interfaceClass.getName()+"."+m.getName()+"(List list)");
+                        throw new Exception("@Select doesn't allow List as parameter : "+interfaceClass.getName()+"."+m.getName()+"(List list)");//@Select는 List를 인자로 허용하지 않습니다
                     }
                     if(m.getReturnType().isAssignableFrom(List.class)){
                         sb.append("List");
