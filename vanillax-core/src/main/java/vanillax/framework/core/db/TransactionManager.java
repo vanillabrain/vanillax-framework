@@ -48,7 +48,6 @@ public class TransactionManager {
     }
 
     public String startTxSession(boolean autoCommit){
-        log.info("transaction started.");
         Stack<TransactionSession> stack = stackThreadLocal.get();
         if(stack == null){
             stack = new Stack<TransactionSession>();
@@ -56,6 +55,7 @@ public class TransactionManager {
         }
         TransactionSession txSession = new TransactionSession(autoCommit);
         stack.add(txSession);
+        log.info("transaction started ["+txSession.getId()+"]");
         return txSession.getId();
     }
 
@@ -142,7 +142,7 @@ public class TransactionManager {
             stack.add(currSession);
             throw e;
         }
-        log.info("transaction finished");
+        log.info("transaction finished ["+currSession.getId()+"]");
     }
 
     /**

@@ -1,5 +1,7 @@
 package vanillax.framework.core.db;
 
+import vanillax.framework.core.util.StringUtil;
+
 import java.sql.Connection;
 import java.util.*;
 
@@ -14,7 +16,7 @@ public class TransactionSession {
 
 
     public TransactionSession(boolean autoCommit){
-        this.id = UUID.randomUUID().toString();
+        this.id = StringUtil.makeUid();
         this.autoCommit = autoCommit;
         this.connectionMap = new HashMap<>(4);
     }
