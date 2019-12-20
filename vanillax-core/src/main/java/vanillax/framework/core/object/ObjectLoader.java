@@ -142,10 +142,14 @@ public class ObjectLoader {
         //존재하지않는 파일 체크하지않게 확인하는 시간 테이블을 정리하는 로직
         //5만개가 넘어가면 정해진 시간값이 지난 데이터는 모두 삭제한다.
         if(checkedFileMap.size() > 50000){
+            List<String> listToRemove = new ArrayList<>(checkedFileMap.size());
             for(String key:checkedFileMap.keySet()){
                 if(curr - checkedFileMap.get(key) > DUP_CHECK_TIME + 1000){
-                    checkedFileMap.remove(key);
+                    listToRemove.add(key);
                 }
+            }
+            for(String key:listToRemove){
+                checkedFileMap.remove(key);
             }
         }
         return groovyObject;
