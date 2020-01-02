@@ -183,7 +183,7 @@ public class ObjectLoader {
             return null;
 
         /*
-         * 중요 : Vanilla Framework에서 GroovyObject간 상호 참조가 허용되지 않는다. 상호 참조를 확인하기 위한 로직이다.
+         * 중요 : Vanilla Framework에서 GroovyObject간 상호 참조가 허용되지 않는다. 상호 참조를 확인하기 위한 로직이다.
          * service -> common groovy object -> DAO 와 같이 일방향 참조만 가능하다.
          */
         if(onLoadingClasses.containsKey(className)){
