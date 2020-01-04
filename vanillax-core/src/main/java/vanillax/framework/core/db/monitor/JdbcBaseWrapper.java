@@ -18,4 +18,10 @@ public class JdbcBaseWrapper implements IJdbcWrapper{
     public void setId(String id) {
         this.id = id;
     }
+
+    @Override
+    public String toString(){
+        return this.id;
+    }
+
 }
