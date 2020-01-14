@@ -46,7 +46,7 @@ war {   //war 플러그인 설정,
 
 publish {
     artifactId = 'vanillax-webmvc'
-    publishVersion = '1.0.14'
+    publishVersion = '1.0.15'
     desc = 'VanillaX Web MVC'
     userOrg = POM_DEVELOPER_ID
     groupId = GROUP
