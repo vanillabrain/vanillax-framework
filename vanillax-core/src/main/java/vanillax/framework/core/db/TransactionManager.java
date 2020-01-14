@@ -68,7 +68,7 @@ public class TransactionManager {
      */
     public void addConnection(String dataSourceName, Connection connection)throws Exception{
         Stack<TransactionSession> stack = stackThreadLocal.get();
-        if(stack == null){//Transaction이 정의되지 않았을 경우이다.
+        if(stack == null || stack.size() == 0){//Transaction이 정의되지 않았을 경우이다.
             startTxSession(true);//Transaction을 기본값으로 시작한다. 이 경우 로직이 최종 마무리되었을 때 반드시 clearTxSession()메소드를 호출해야한다.
             stack = stackThreadLocal.get();
         }
