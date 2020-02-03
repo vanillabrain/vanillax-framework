@@ -131,32 +131,44 @@ public class RestServlet extends MvcServletBase {
             response.setStatus(424);//메소드 실패
             onError = true;
         }finally {
-            TransactionManager.getInstance().clearTxSession();//Transaction 관련 데이터를 초기화한다.
-            ConnectionMonitor.getInstance().onThreadFinished();//Thread종료시 close되지 않은 Connection이 있는지 검사한다.
-            if(filterList != null)
-                filterList.clear(); //필터 정리
-        }
-        response.setContentType("application/json; charset=UTF-8");
-
-        if(result == null){
-            result = new LinkedHashMap<String, String>();
-        }
-        //입력 관리 데이터 삭제 및 처리 결과 관리 데이터 입력
-        if(result instanceof Map){
-            Map<String,Object> map = ((Map<String,Object>) result);
-            for(Object obj:map.keySet().toArray()){
-                String key = obj.toString();
-                if(!"_result".equals(key) &&  key.startsWith("_")){
-                    map.remove(key);
-                }
+            try {
+                TransactionManager.getInstance().clearTxSession();//Transaction 관련 데이터를 초기화한다.
+                ConnectionMonitor.getInstance().onThreadFinished();//Thread종료시 close되지 않은 Connection이 있는지 검사한다.
+            }catch(Throwable t){
+                String e = StringUtil.errorStackTraceToString(t);
+                log.warning(e);
             }
-            if(!onError)
-                map.put("_result","OK");
-            map.put("_curr", DateUtil.getCurrentTimeString());
+            try {
+                if (filterList != null)
+                    filterList.clear(); //필터 정리
+            }catch(Throwable ignore){}
         }
+        try {
+            response.setContentType("application/json; charset=UTF-8");
 
-        JsonOutput.toJson(response.getWriter(), result);
-        response.flushBuffer();
+            if (result == null) {
+                result = new LinkedHashMap<String, String>();
+            }
+            //입력 관리 데이터 삭제 및 처리 결과 관리 데이터 입력
+            if (result instanceof Map) {
+                Map<String, Object> map = ((Map<String, Object>) result);
+                for (Object obj : map.keySet().toArray()) {
+                    String key = obj.toString();
+                    if (!"_result".equals(key) && key.startsWith("_")) {
+                        map.remove(key);
+                    }
+                }
+                if (!onError)
+                    map.put("_result", "OK");
+                map.put("_curr", DateUtil.getCurrentTimeString());
+            }
+
+            JsonOutput.toJson(response.getWriter(), result);
+            response.flushBuffer();
+        }catch (Throwable t){
+            String e = StringUtil.errorStackTraceToString(t);
+            log.warning(e);
+        }
     }
 
     @Override

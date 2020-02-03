@@ -3,8 +3,7 @@ package vanillax.framework.core.db.monitor;
 import vanillax.framework.core.util.StringUtil;
 
 import java.text.DecimalFormat;
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -34,13 +33,17 @@ public class ConnectionMonitor {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         //10초마다 Active Connection갯수 로그를 작성한다.
         Runnable task = () -> {
-            if(this.activeConnectionTable.size() > 0)
-                log.info("active connection count : "+this.activeConnectionTable.size());
-            for(String k: activeConnectionTable.keySet()){
-                ConnectionMonitorInfo info = this.activeConnectionTable.get(k);
-                if(System.currentTimeMillis() - info.getActiveStartTime() > ACTIVE_DURATION_FOR_LOG*1000){
-                    log.info("Active connection : "+info.toString());
+            try {
+                if (this.activeConnectionTable.size() > 0)
+                    log.info("active connection count : " + this.activeConnectionTable.size());
+                for (String k : activeConnectionTable.keySet()) {
+                    ConnectionMonitorInfo info = this.activeConnectionTable.get(k);
+                    if (System.currentTimeMillis() - info.getActiveStartTime() > ACTIVE_DURATION_FOR_LOG * 1000) {
+                        log.info("Active connection : " + info.toString());
+                    }
                 }
+            }catch (Throwable ignore){
+                //가끔 java.util.ConcurrentModificationException 이 발생한다. 그래도 10초후에 다시 확인할 테니 신경쓰지 마라.
             }
         };
         taskHandle = executor.scheduleAtFixedRate(task, 0, LOG_INTERVAL, TimeUnit.SECONDS);
@@ -66,7 +69,9 @@ public class ConnectionMonitor {
     public void onGetConnection(String connectionId, StackTraceElement[] traces){
         long threadId = Thread.currentThread().getId();
         ConnectionMonitorInfo info = new ConnectionMonitorInfo(connectionId, threadId, System.currentTimeMillis(),traces);
-        activeConnectionTable.put(connectionId, info);
+        synchronized (ConnectionMonitor.class){
+            activeConnectionTable.put(connectionId, info);
+        }
     }
 
     /**
@@ -75,7 +80,10 @@ public class ConnectionMonitor {
      * @param connectionId colose할 대상의 Connection ID
      */
     public void onClose(String connectionId){
-        ConnectionMonitorInfo info = activeConnectionTable.remove(connectionId);
+        ConnectionMonitorInfo info = null;
+        synchronized (ConnectionMonitor.class) {
+            info = activeConnectionTable.remove(connectionId);
+        }
         if(info == null)
             return;
         if(System.currentTimeMillis() - info.getActiveStartTime() > 10*1000){//임시로 10초에 로그를 기록하게 수정
@@ -91,12 +99,19 @@ public class ConnectionMonitor {
      * 해당 Thread에서 열었던 Connection이 닫히지 않은 상태로 있는지 확인한다.
      */
     public void onThreadFinished(){
-        long threadId = Thread.currentThread().getId();
-        for(String k:this.activeConnectionTable.keySet()){
-            ConnectionMonitorInfo info = this.activeConnectionTable.get(k);
-            if(info.getThreadId() == threadId){
-                log.warning("NOT CLOSED CONNECTION!!!! "+info.toString());//이 경우가 매우 심각한 거다.
+        try {
+            long threadId = Thread.currentThread().getId();
+            synchronized (ConnectionMonitor.class) {
+                for (String k : this.activeConnectionTable.keySet()) {
+                    ConnectionMonitorInfo info = this.activeConnectionTable.get(k);
+                    if (info.getThreadId() == threadId) {
+                        log.warning("NOT CLOSED CONNECTION!!!! " + info.toString());//이 경우가 매우 심각한 거다.
+                    }
+                }
             }
+        }catch (Throwable t){
+            String e = StringUtil.errorStackTraceToString(t);
+            log.warning(e);
         }
     }
 
