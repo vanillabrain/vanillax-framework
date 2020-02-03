@@ -1,6 +1,7 @@
 package vanillax.framework.core.db.monitor;
 
-import javax.xml.bind.DatatypeConverter;
+import vanillax.framework.core.util.StringUtil;
+
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
@@ -129,7 +130,7 @@ public class PreparedStatmentWrapper extends StatementWrapper implements Prepare
 
     @Override
     public void setBytes(int parameterIndex, byte[] x) throws SQLException {
-        String s = DatatypeConverter.printHexBinary(x);
+        String s = StringUtil.bytesToHex(x);
         this.paramMap.put(parameterIndex, "0x"+s);
         preparedStatement.setBytes(parameterIndex, x);
     }

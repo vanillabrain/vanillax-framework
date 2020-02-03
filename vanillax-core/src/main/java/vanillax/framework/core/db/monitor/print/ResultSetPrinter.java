@@ -1,6 +1,7 @@
 package vanillax.framework.core.db.monitor.print;
 
-import javax.xml.bind.DatatypeConverter;
+import vanillax.framework.core.util.StringUtil;
+
 import java.util.List;
 
 public class ResultSetPrinter {
@@ -137,7 +138,7 @@ public class ResultSetPrinter {
                     }else{
                         byte[] bytes = new byte[arr.length];
                         for(int i = 0; i < arr.length; i++) bytes[i] = arr[i];
-                        obj = DatatypeConverter.printHexBinary(bytes);
+                        obj = StringUtil.bytesToHex(bytes);
                     }
                 }
 
