@@ -1,5 +1,6 @@
 package vanillax.framework.core.object;
 
+import org.codehaus.groovy.control.MultipleCompilationErrorsException;
 import vanillax.framework.core.config.FrameworkConfig;
 
 import java.io.File;
@@ -50,6 +51,11 @@ public class ScriptClassLoader extends ClassLoader{
                     }
                 }
             }
+        }catch (MultipleCompilationErrorsException e){
+            //Script 컴파일시 대상 클래스가 존재하지 않아서 import 오류가 발생할 때 상위 script에서 ClassNotFoundException으로 잡히면
+            //상위 script의 import 구문 오류만 표시되고 실제 문제가된 script의 오류를 표시하지않게된다
+            //그래서 최초 script의 import 오류발생시 바로 종료하게하기 위해 RuntimeException을 던진다
+            throw new RuntimeException(e);
         }catch (Exception e){
             throw new ClassNotFoundException("can not found class : "+name, e);
         }
