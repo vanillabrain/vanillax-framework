@@ -23,6 +23,7 @@ import vanillax.framework.core.object.Autowired
 import vanillax.framework.core.db.Transactional
 
 import java.sql.Timestamp
+import java.text.DecimalFormat
 
 
 /**
@@ -35,14 +36,25 @@ class ScheduleStartLogger extends ActionBase{
     @Autowired
     CommonSequence commonSequence
 
-    @Transactional(autoCommit = false)
     def process(obj){
         log.fine "I'm ScheduleLog ....."
-        int id = commonSequence.nextval('scheduleLogSeq')
+
+        long start = System.currentTimeMillis()
+        int id = commonSequence.nextval('scheduleLogSeq')//가끔 이게 문제를 일으킨다. Thread가 경합하면서 Dead Lock 문제를 일으키는 것 같다
+        long duration = System.currentTimeMillis() - start
+        if(duration > 3000){
+            DecimalFormat formatter = new DecimalFormat("#,###")
+            def s = formatter.format(duration)
+            log.severe("Too long time to get sequence number : $s ms")
+        }
         Timestamp nowDate = new Timestamp(System.currentTimeMillis())
-        scheduleLogDAO.insertScheduleLog([id:id, script:obj.script, nowDate:nowDate])
+        insertScheduleLog([id:id, script:obj.script, nowDate:nowDate])
         def newOne = [id:id, script:obj.script, startTime:System.currentTimeMillis()]
         return newOne
     }
 
+    @Transactional(autoCommit = false)
+    def insertScheduleLog(obj){
+        scheduleLogDAO.insertScheduleLog(obj)
+    }
 }

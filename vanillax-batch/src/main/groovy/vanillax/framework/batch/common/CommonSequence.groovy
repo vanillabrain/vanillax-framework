@@ -42,7 +42,7 @@ class CommonSequence{
     }
 
     @Transactional(autoCommit = false)
-    def nextval(String sequenceName){
+    synchronized def nextval(String sequenceName){
         def cur = commonSequenceDataDAO.selectCommonSequenceData([sequenceName:sequenceName])
         if(!cur){
             commonSequenceDataDAO.insertCommonSequenceData([sequenceName:sequenceName])
