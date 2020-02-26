@@ -2,6 +2,7 @@ package vanillax.framework.core.db.orm;
 
 import groovy.sql.Sql;
 import vanillax.framework.core.Constants;
+import vanillax.framework.core.util.CollectionUtil;
 import vanillax.framework.core.util.DateUtil;
 import vanillax.framework.core.util.StringUtil;
 import vanillax.framework.core.db.IConnectionManager;
@@ -70,7 +71,7 @@ public class RepositoryBase {
         if(sqlInfo.timestampFiels != null && sqlInfo.timestampFiels.size() > 0){
             DateUtil.long2Date(resultList, sqlInfo.timestampFiels);
         }
-        return resultList;
+        return CollectionUtil.list2list(resultList);
     }
 
     protected Map selectOne(String methodPath, Map param)throws Exception{
@@ -89,7 +90,7 @@ public class RepositoryBase {
         if(sqlInfo.timestampFiels != null && sqlInfo.timestampFiels.size() > 0){
             DateUtil.long2Date(resultMap, sqlInfo.timestampFiels);
         }
-        return resultMap;
+        return CollectionUtil.map2map(resultMap);
     }
 
     protected List insertList(String methodPath, List<Map> paramList)throws Exception{
