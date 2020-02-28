@@ -139,8 +139,8 @@ public class JsonServlet extends MvcServletBase {
                 result = filterPostprocess(filterList, result);
             }
         }catch(Throwable e){
-            String stackTrace = StringUtil.errorStackTraceToString(e);
-            log.warning("Error occurred during process the service : " + stackTrace);//서비스 실행중 오류가 발생했습니다
+            String detail = "";
+            String code = "";
             Map<String, String> errorMap = new LinkedHashMap<String, String>();
             errorMap.put("_result", "ERROR");
             errorMap.put("message", e.getMessage());
@@ -148,7 +148,12 @@ public class JsonServlet extends MvcServletBase {
                 BaseException be = (BaseException)e;
                 errorMap.put("detail", be.getDetail());
                 errorMap.put("code", be.getCode());
+                detail = " " + be.getDetail();
+                code = " " + be.getCode();
             }
+            String stackTrace = e.getClass().getName() + code + " " + e.getMessage() + detail +"\n"+  StringUtil.stackTraceToString(e.getStackTrace());
+            log.warning("Error occurred during process the service : " + stackTrace);
+
             if(ConfigHelper.getBoolean("response.stackTrace", false)){
                 errorMap.put("stackTrace", stackTrace);
             }
